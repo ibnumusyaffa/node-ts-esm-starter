@@ -4,6 +4,7 @@
     "skipLibCheck": true, //Skip node_modules type checking
     "target": "es2022", //Compile target
     "lib": ["es2022"], //Tell TypeScript what built-in types to include
+    "jsx": "react-jsx",
 
     /* Module system: */
     "esModuleInterop": true,

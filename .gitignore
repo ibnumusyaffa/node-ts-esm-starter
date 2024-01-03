@@ -3,6 +3,8 @@ build
 dist
 .env
 
+.rendered
+
 # Ignore all files in the storage/app/ directory
 /storage/app/*
 
