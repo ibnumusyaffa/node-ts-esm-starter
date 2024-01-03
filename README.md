@@ -14,6 +14,7 @@ Opiniated project template for a Node.js & TypeScript apps with native ESM
 - Pino for logging
 - RabbitMQ for job queue
 - ESLint & Prettier — linting & formatting
+- [jsx-email](https://github.com/shellscape/jsx-email) for email templating
 
 ## Quick Start
 
