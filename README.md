@@ -22,7 +22,7 @@ Opiniated project template for a Node.js & TypeScript apps with native ESM
 clone repo without commit history
 
 ```bash
-git clone --depth=1 https://github.com/ibnumusyaffa/node-typescript-esm-starter my-project-name
+git clone --depth=1 https://github.com/ibnumusyaffa/node-ts-esm-starter my-project-name
 ```
 
 ### 2. Install dependencies
