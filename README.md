@@ -1,6 +1,6 @@
 # Node Typescript ESM
 
-Opiniated project template for a Node.js & TypeScript apps with native ESM
+Opinionated project template for a Node.js & TypeScript apps with native ESM
 
 ## Features
 
