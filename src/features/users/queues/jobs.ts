@@ -1,10 +1,10 @@
-// import { connection } from "@/shared/rabbit-mq.js"
+import { connection } from "@/shared/rabbit-mq.js"
 
-// export async function sendEmail(message: string) {
-//   const channel = await connection.createChannel()
-//   await channel.assertQueue("send-email", { durable: true })
+export async function sendEmail(message: string) {
+  const channel = await connection.createChannel()
+  await channel.assertQueue("send-email", { durable: true })
 
-//   channel.sendToQueue("send-email", Buffer.from(message), {
-//     persistent: true,
-//   })
-// }
+  channel.sendToQueue("send-email", Buffer.from(message), {
+    persistent: true,
+  })
+}
