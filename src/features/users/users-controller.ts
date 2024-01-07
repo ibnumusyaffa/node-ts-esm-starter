@@ -1,6 +1,6 @@
 import { logger } from "@/shared/logger.js"
 import { Request, Response, NextFunction } from "express"
-import { sendEmail } from "./queues/jobs.js"
+import { sendEmail } from "./users-queue.js"
 
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {

@@ -6,7 +6,7 @@ Warning:
 
 import { Cron } from "croner"
 import { logger } from "./shared/logger.js"
-import { sendEmail } from "@/features/users/queues/jobs.js"
+import { sendEmail } from "@/features/users/users-queue.js"
 
 function errorHandler(e: unknown, job: Cron) {
   logger.error(`"${job.name}" job failed at ${job.currentRun()}`)

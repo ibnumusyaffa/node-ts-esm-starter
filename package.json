@@ -14,10 +14,10 @@
     "format:check": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|jsx|tsx)\"",
     "db:generate": "npx drizzle-kit generate:mysql",
     "db:migrate": "npx tsx ./src/shared/db/migrate.ts",
-    "worker:send-email": "node ./dist/features/users/queues/send-email-worker.js",
-    "email:preview": "email preview ./src/shared/email/templates",
+    "email:preview": "email preview",
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
-    "scheduler:run": "node watch ./dist/scheduler.js"
+    "scheduler:run": "node watch ./dist/scheduler.js",
+    "user:worker:send-email": "node ./dist/features/users/worker/send-email-worker.js"
   },
   "keywords": [],
   "author": "",
