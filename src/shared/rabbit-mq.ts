@@ -2,7 +2,7 @@ import amqp from "amqplib"
 
 async function connect() {
   try {
-    await amqp.connect({
+    const connection = await amqp.connect({
       protocol: "amqp",
       hostname: process.env.RABBITMQ_HOST || "localhost",
       port: process.env.RABBITMQ_PORT
@@ -11,11 +11,12 @@ async function connect() {
       username: process.env.RABBITMQ_USERNAME || "guest",
       password: process.env.RABBITMQ_PASSWORD || "guest",
     })
+    return connection
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Failed connect to RabbitMQ: ",error?.message)
-      process.exit(1)
+      console.log("Failed connect to RabbitMQ: ", error.message)
     }
+    throw error
   }
 }
 
