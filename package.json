@@ -14,9 +14,9 @@
     "format:check": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|jsx|tsx)\"",
     "db:generate": "npx drizzle-kit generate:mysql",
     "db:migrate": "npx tsx ./src/shared/db/migrate.ts",
-    "email:preview": "email preview",
+    "email:preview": "email preview ./src/features/users/email",
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
-    "scheduler:run": "node watch ./dist/scheduler.js",
+    "scheduler:run": "node ./dist/scheduler.js",
     "user:worker:send-email": "node ./dist/features/users/worker/send-email-worker.js"
   },
   "keywords": [],
@@ -44,7 +44,6 @@
   "dependencies": {
     "amqplib": "^0.10.3",
     "cors": "^2.8.5",
-    "cron": "^3.1.6",
     "croner": "^8.0.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
