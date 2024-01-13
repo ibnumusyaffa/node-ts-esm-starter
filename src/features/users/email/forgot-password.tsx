@@ -3,105 +3,86 @@ import {
   Button,
   Container,
   Head,
+  Hr,
   Html,
   Img,
-  Link,
   Preview,
   Section,
-  Text,
+  Tailwind,
 } from "jsx-email"
 
-interface DropboxResetPasswordEmailProps {
-  userFirstname?: string
-  resetPasswordLink?: string
+type Props = {
+  name: string
+  link: string
 }
 
-const baseUrl = "https://jsx.email/assets/demo/"
-
-export const DropboxResetPasswordEmail = ({
-  userFirstname,
-  resetPasswordLink,
-}: DropboxResetPasswordEmailProps) => {
-  return (
-    <Html>
-      <Head />
-      <Preview>Dropbox reset your password</Preview>
-      <Body style={main}>
-        <Container style={container}>
+export const ForgotPasswordEmail = ({ name, link }: Props) => (
+  <Html>
+    <Head />
+    <Preview>
+      The sales intelligence platform that helps you uncover qualified leads.
+    </Preview>
+    <Tailwind>
+      <Body
+        style={{
+          backgroundColor: "#ffffff",
+          fontFamily:
+            '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+        }}
+      >
+        <Container
+         className="mx-auto py-[20px] px-[12px] md:py-[40px] md:px-0 lg:py-[48px] lg:px-0"
+        >
           <Img
-            src={`${baseUrl}dropbox-logo.png`}
-            width="40"
-            height="33"
-            alt="Dropbox"
+            src="https://jsx.email/assets/demo/koala-logo.png"
+            width="170"
+            height="50"
+            alt="Koala"
+            style={{
+              margin: "0 auto",
+            }}
           />
+          <p className="text-[16px] text-gray-800">Hi {name},</p>
+          <p className="text-[16px] text-gray-800">
+            Someone recently requested a password change for your Dropbox
+            account. If this was you, you can set a new password here:
+          </p>
           <Section>
-            <Text style={text}>Hi {userFirstname},</Text>
-            <Text style={text}>
-              Someone recently requested a password change for your Dropbox
-              account. If this was you, you can set a new password here:
-            </Text>
-            <Button style={button} href={resetPasswordLink}>
-              Reset password
+            <Button
+              className="bg-[#5F51E8] rounded text-white text-[16px] p-[12px] no-underline block"
+              href={link}
+            >
+              Reset Password
             </Button>
-            <Text style={text}>
-              If you don&apos;t want to change your password or didn&apos;t
-              request this, just ignore and delete this message.
-            </Text>
-            <Text style={text}>
-              To keep your account secure, please don&apos;t forward this email
-              to anyone. See our Help Center for{" "}
-              <Link style={anchor} href="https://dropbox.com">
-                more security tips.
-              </Link>
-            </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
           </Section>
+          <p className="text-[16px] text-gray-800">
+            If you don't want to change your password or didn't request this,
+            just ignore and delete this message.
+          </p>
+
+          <p className="text-[16px] text-gray-800">
+            Thanks,
+            <br />
+            The Koala team
+          </p>
+          <Hr
+            style={{
+              borderColor: "#cccccc",
+              margin: "20px 0",
+            }}
+          />
+          <p className="text-[12px] text-gray-500">
+            408 Warren Rd - San Mateo, CA 94402
+          </p>
         </Container>
       </Body>
-    </Html>
-  )
-}
+    </Tailwind>
+  </Html>
+)
 
-DropboxResetPasswordEmail.PreviewProps = {
-  userFirstname: "Bruce",
-  resetPasswordLink: "https://dropbox.com",
-} as DropboxResetPasswordEmailProps
+ForgotPasswordEmail.PreviewProps = {
+  name: "Bruce",
+  link: "http://example.com",
+} as Props
 
-export default DropboxResetPasswordEmail
-
-const main = {
-  backgroundColor: "#f6f9fc",
-  padding: "10px 0",
-}
-
-const container = {
-  backgroundColor: "#ffffff",
-  border: "1px solid #f0f0f0",
-  padding: "45px",
-}
-
-const text = {
-  fontSize: "16px",
-  fontFamily:
-    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-  fontWeight: "300",
-  color: "#404040",
-  lineHeight: "26px",
-}
-
-const button = {
-  backgroundColor: "#007ee6",
-  borderRadius: "4px",
-  color: "#fff",
-  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
-  fontSize: "15px",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "block",
-  width: "210px",
-  padding: "14px 7px",
-}
-
-const anchor = {
-  textDecoration: "underline",
-}
+export default ForgotPasswordEmail
