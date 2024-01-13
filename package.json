@@ -17,7 +17,7 @@
     "email:preview": "email preview ./src/features/users/email",
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
     "scheduler:run": "node ./dist/scheduler.js",
-    "user:worker:forgot-password": "tsx ./src/features/users/jobs/forgot-password.worker.ts",
+    "user:worker:forgot-password": "tsx  ./src/features/users/jobs/forgot-password.worker.ts",
     "test": "tap run"
   },
   "keywords": [],

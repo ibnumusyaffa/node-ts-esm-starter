@@ -15,6 +15,8 @@ Opinionated project template for a Node.js & TypeScript apps with native ESM
 - RabbitMQ for job queue
 - ESLint & Prettier — linting & formatting
 - [jsx-email](https://github.com/shellscape/jsx-email) for email templating
+- node-tap for testing
+- croner for scheduler
 
 ## Quick Start
 
