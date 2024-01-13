@@ -1,12 +1,12 @@
 /*
 Warning:
 - The scheduler is only to send job to the queue not for executing the actual tasks.
-- There should be only one process of the scheduler running at a time to prevent duplicated jobs.
+- There should be only one process/instance of the scheduler running at a time to prevent duplicated jobs.
 */
 
 import { Cron } from "croner"
 import { logger } from "./shared/logger.js"
-import { sendEmail } from "@/features/users/users-queue.js"
+import { sendEmail } from "@/features/users/jobs/users.queue.js"
 
 function errorHandler(e: unknown, job: Cron) {
   logger.error(`"${job.name}" job failed at ${job.currentRun()}`)

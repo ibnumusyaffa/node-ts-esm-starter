@@ -1,5 +1,5 @@
 import express from "express"
-import users from "@/features/users/users-router.js"
+import users from "@/features/users/users.router.js"
 
 const router = express.Router()
 router.get("/", (req, res) => {
