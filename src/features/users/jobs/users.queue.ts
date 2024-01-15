@@ -2,7 +2,7 @@ import { connection } from "@/shared/rabbit-mq.js"
 
 export type Message = { name: string; link: string; email: string }
 
-export async function forgotPassword(data: Message) {
+export async function forgotPasswordEmail(data: Message) {
   const channel = await connection.createChannel()
   await channel.assertQueue("forgot-password", { durable: true })
   const message = JSON.stringify(data)
