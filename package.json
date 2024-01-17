@@ -18,7 +18,7 @@
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
     "scheduler:run": "node ./dist/scheduler.js",
     "user:worker:forgot-password": "tsx  ./src/features/users/jobs/forgot-password.worker.ts",
-    "test": "NODE_ENV=test tap run"
+    "test": "NODE_ENV=test tap run --include='src/tests/**/*.test.+(js|ts|jsx|tsx)'"
   },
   "keywords": [],
   "author": "",

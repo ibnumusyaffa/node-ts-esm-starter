@@ -3,7 +3,7 @@ import { users } from "@/shared/db/schema.js"
 import { eq, and } from "drizzle-orm"
 import { db } from "@/shared/db/index.js"
 import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
+import { createToken } from "@/shared/auth.js"
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
@@ -21,10 +21,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: "Invalid email or password" })
     }
 
-    const JWT_SECRET = process.env.JWT_SECRET || ""
-    const token = jwt.sign({ email }, JWT_SECRET, {
-      expiresIn: "24h",
-    })
+    const token = createToken(user.email)
     return res.json({ message: "User registered successfully", token })
   } catch (error) {
     return next(error)
