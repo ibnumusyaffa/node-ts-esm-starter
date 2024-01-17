@@ -15,20 +15,22 @@ app.use("*", cors({ origin: "*" }))
 app.use("/static", express.static("storage/public"))
 app.use(routes)
 
-app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-  if (error instanceof Error) {
-    handleError(error)
-  }
+app.use(
+  async (error: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (error instanceof Error) {
+      await handleError(error)
+    }
 
-  if (process.env.NODE_ENV === "development" && error instanceof Error) {
+    if (process.env.NODE_ENV === "development" && error instanceof Error) {
+      return res.status(500).send({
+        message: error.message,
+        stack: error.stack,
+      })
+    }
     return res.status(500).send({
-      message: error.message,
-      stack: error.stack,
+      message: "internal server error",
     })
   }
-  return res.status(500).send({
-    message: "internal server error",
-  })
-})
+)
 
 export default app
