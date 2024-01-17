@@ -11,6 +11,7 @@ t.test("can login with valid data", async (t) => {
     email: faker.internet.email(),
     password: faker.internet.password({ length: 8 }),
   }
+
   await request(app)
     .post("/users")
     .auth(createToken("Kameron.Jacobson87@hotmail.com"), { type: "bearer" })

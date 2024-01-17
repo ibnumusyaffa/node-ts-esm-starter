@@ -1,18 +1,11 @@
 import "dotenv/config"
 import http from "http"
 import app from "@/app.js"
-import { showErrorLine } from "@/shared/middleware/error.js"
+import { handleError } from "@/shared/error.js"
 import process from "node:process"
 
 process.on("uncaughtException", async (err) => {
-  await showErrorLine(err)
-  process.exit(1)
-})
-
-process.on("unhandledRejection", async (err) => {
-  if (err instanceof Error) {
-    await showErrorLine(err)
-  }
+  await handleError(err)
   process.exit(1)
 })
 

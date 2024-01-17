@@ -8,7 +8,7 @@ import { Cron } from "croner"
 import { logger } from "./shared/logger.js"
 import { forgotPasswordEmail } from "@/features/users/jobs/users.queue.js"
 
-function errorHandler(e: unknown, job: Cron) {
+function handleError(e: unknown, job: Cron) {
   logger.error(`"${job.name}" job failed at ${job.currentRun()}`)
 }
 
@@ -16,9 +16,13 @@ Cron(
   "* * * * * *",
   {
     name: "hello",
-    catch: errorHandler,
+    catch: handleError,
   },
   async (v: Cron) => {
-    await forgotPasswordEmail({ name: "ibnu", email: "ibnu@gmail.com", link: "" })
+    await forgotPasswordEmail({
+      name: "ibnu",
+      email: "ibnu@gmail.com",
+      link: "",
+    })
   }
 )
