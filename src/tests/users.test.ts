@@ -23,7 +23,6 @@ t.test("detail user", async (t) => {
   const listResponse = await request(app).get("/users")
   const id = listResponse.body[0].id
   const detailResponse = await request(app).get(`/users/${id}`)
-  console.log(detailResponse.body)
 })
 
 t.teardown(() => {

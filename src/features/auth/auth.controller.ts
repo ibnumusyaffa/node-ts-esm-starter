@@ -5,7 +5,6 @@ import { db } from "@/shared/db/index.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
-const JWT_SECRET = "your-secret-key"
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body
@@ -22,7 +21,9 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: "Invalid email or password" })
     }
 
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "24h" })
+    const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
+      expiresIn: "24h",
+    })
     return res.json({ message: "User registered successfully", token })
   } catch (error) {
     return next(error)
