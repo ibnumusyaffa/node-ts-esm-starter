@@ -21,10 +21,29 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: "Invalid email or password" })
     }
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
+    const JWT_SECRET = process.env.JWT_SECRET || ""
+    const token = jwt.sign({ email }, JWT_SECRET, {
       expiresIn: "24h",
     })
     return res.json({ message: "User registered successfully", token })
+  } catch (error) {
+    return next(error)
+  }
+}
+
+export async function profile(req: Request, res: Response, next: NextFunction) {
+  try {
+    const email = req.user?.email
+
+    if (!email) {
+      return res.status(401).send({ message: "invalid" })
+    }
+
+    const user = await db.query.users.findFirst({
+      where: and(eq(users.email, email)),
+    })
+
+    return res.json(user)
   } catch (error) {
     return next(error)
   }

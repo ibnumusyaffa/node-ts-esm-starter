@@ -9,3 +9,12 @@ export const createUser = [
     .withMessage("required"),
   body("password").notEmpty().withMessage("required").isLength({ min: 6 }),
 ]
+
+export const updateUser = [
+  body("name").notEmpty().withMessage("required"),
+  body("email")
+    .isEmail()
+    .withMessage("Email is not valid")
+    .notEmpty()
+    .withMessage("required"),
+]

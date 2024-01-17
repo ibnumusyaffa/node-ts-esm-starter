@@ -13,17 +13,60 @@ export async function list(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+type CreateReqBody = {
+  name: string
+  email: string
+  password: string
+}
+
+export async function create(
+  req: Request<{}, {}, CreateReqBody>,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const body = req.body as {
-      name: string
-      email: string
-      password: string
+    const body = req.body
+
+    await db.insert(users).values({
+      name: body.name,
+      email: body.email,
+      password: await bcrypt.hash(body.password, 10),
+    })
+
+    return res.status(201).send({ message: "Successfully create data" })
+  } catch (error) {
+    return next(error)
+  }
+}
+
+type UpdateReqBody = {
+  name: string
+  email: string
+  password: string
+}
+
+export async function update(
+  req: Request<{ id: string }, {}, UpdateReqBody>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const body = req.body
+    const userId = parseInt(req.params.id)
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    })
+
+    if (!user) {
+      return res.status(404).send({
+        message: "not found",
+      })
     }
 
-    body.password = await bcrypt.hash(body.password, 10)
-
-    await db.insert(users).values(body)
+    await db
+      .update(users)
+      .set({ name: body.name, email: body.email })
+      .where(eq(users.id, userId))
 
     return res.send({ message: "Successfully create data" })
   } catch (error) {
@@ -41,7 +84,37 @@ export async function detail(
     const user = await db.query.users.findFirst({
       where: eq(users.id, userId),
     })
+
+    if (!user) {
+      return res.status(404).send({
+        message: "not found",
+      })
+    }
     return res.send(user)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+export async function destroy(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = parseInt(req.params.id)
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    })
+
+    if (!user) {
+      return res.status(404).send({
+        message: "not found",
+      })
+    }
+
+    await db.delete(users).where(eq(users.id, userId))
+    return res.send({ message: "Successfully delete data" })
   } catch (error) {
     return next(error)
   }
