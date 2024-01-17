@@ -16,6 +16,9 @@ const config = {
   production: {
     redact: ["req.headers.authorization"],
   },
+  test: {
+    enabled: false,
+  },
 }
 
 const env = String(process.env.NODE_ENV)

@@ -7,5 +7,6 @@ const router = express.Router()
 
 router.get("/", user.list)
 router.post("/", validate(schema.createUser), user.create)
+router.get("/:id", user.detail)
 
 export default router

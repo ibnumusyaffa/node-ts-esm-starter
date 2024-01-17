@@ -1,17 +1,13 @@
-import { logger } from "@/shared/logger.js"
 import { Request, Response, NextFunction } from "express"
-import { forgotPasswordEmail } from "./jobs/users.queue.js"
+import { users } from "@/shared/db/schema.js"
+import { db } from "@/shared/db/index.js"
+import bcrypt from "bcrypt"
+import { eq } from "drizzle-orm"
 
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {
-    req.log.info("log pino with request")
-    logger.info("log pino with default pino")
-    await forgotPasswordEmail({
-      name: "ibnu",
-      email: "ibnu.musyaffa@gmail.com",
-      link: "http://example.app/reset-password",
-    })
-    return res.send({ message: "Hello from users" })
+    const users = await db.query.users.findMany()
+    return res.json(users)
   } catch (error) {
     return next(error)
   }
@@ -19,7 +15,33 @@ export async function list(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    return res.send({ message: "Hello from users" })
+    const body = req.body as {
+      name: string
+      email: string
+      password: string
+    }
+
+    body.password = await bcrypt.hash(body.password, 10)
+
+    await db.insert(users).values(body)
+
+    return res.send({ message: "Successfully create data" })
+  } catch (error) {
+    return next(error)
+  }
+}
+
+export async function detail(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = parseInt(req.params.id)
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    })
+    return res.send(user)
   } catch (error) {
     return next(error)
   }
