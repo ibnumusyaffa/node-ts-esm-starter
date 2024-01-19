@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express"
 import { users } from "@/shared/db/schema.js"
 import { eq, and } from "drizzle-orm"
 import { db } from "@/shared/db/index.js"
+import env from "@/shared/env.js"
 
 export async function isAuthenticated(
   req: Request,
@@ -29,8 +30,7 @@ export async function isAuthenticated(
         .json({ message: "Invalid Authorization header format" })
     }
 
-    const JWT_SECRET = process.env.JWT_SECRET || ""
-    jwt.verify(token, JWT_SECRET, async (err, decoded) => {
+    jwt.verify(token, env.APP_KEY, async (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid token" })
       }
@@ -54,8 +54,7 @@ export async function isAuthenticated(
 }
 
 export function createToken(email: string) {
-  const JWT_SECRET = process.env.JWT_SECRET || ""
-  const token = jwt.sign({ email }, JWT_SECRET, {
+  const token = jwt.sign({ email }, env.APP_KEY, {
     expiresIn: "24h",
   })
 

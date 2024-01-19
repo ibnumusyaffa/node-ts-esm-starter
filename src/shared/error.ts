@@ -2,9 +2,9 @@ import "dotenv/config"
 import Youch from "youch"
 import forTerminal from "youch-terminal"
 import { logger } from "./logger.js"
-
+import env from "@/shared/env.js"
 export async function handleError(err: Error) {
-  if (process.env.NODE_ENV === "development") {
+  if (env.APP_DEBUG) {
     await prettyError(err)
   }
   logger.error(err)

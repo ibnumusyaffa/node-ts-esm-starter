@@ -1,6 +1,8 @@
-import { pinoHttp } from "pino-http"
+import { pinoHttp, Options } from "pino-http"
+import env from "@/shared/env.js"
+import { randomUUID } from "crypto"
 
-const config = {
+const config: Record<typeof env.NODE_ENV, Options> = {
   development: {
     transport: {
       target: "pino-http-print",
@@ -12,15 +14,24 @@ const config = {
         lax: true,
       },
     },
+    genReqId: function (req, res) {
+      const id = randomUUID()
+      res.setHeader("X-Request-Id", id)
+      return id
+    },
   },
   production: {
     redact: ["req.headers.authorization"],
+    genReqId: function (req, res) {
+      const id = randomUUID()
+      res.setHeader("X-Request-Id", id)
+      return id
+    },
   },
   test: {
     enabled: false,
   },
 }
 
-const env = String(process.env.NODE_ENV)
-export const httpLogger = pinoHttp(config[env])
+export const httpLogger = pinoHttp(config.development)
 export const logger = httpLogger.logger

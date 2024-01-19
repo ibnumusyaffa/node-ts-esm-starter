@@ -3,7 +3,6 @@ build
 dist
 .tap
 .env
-
 .rendered
 
 # Ignore all files in the storage/app/ directory

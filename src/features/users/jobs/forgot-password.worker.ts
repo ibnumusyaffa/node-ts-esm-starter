@@ -20,7 +20,6 @@ channel.consume(
       const data: Message = JSON.parse(msg.content.toString())
       const html = await render(ForgotPasswordEmail(data))
       await transporter.sendMail({
-        from: "penguin@joker.us",
         to: data.email,
         subject: "Forgot Password",
         html: html,

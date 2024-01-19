@@ -1,15 +1,14 @@
 import amqp from "amqplib"
+import env from "@/shared/env.js"
 
 async function connect() {
   try {
     const connection = await amqp.connect({
       protocol: "amqp",
-      hostname: process.env.RABBITMQ_HOST || "localhost",
-      port: process.env.RABBITMQ_PORT
-        ? parseInt(process.env.RABBITMQ_PORT, 10)
-        : 5672,
-      username: process.env.RABBITMQ_USERNAME || "guest",
-      password: process.env.RABBITMQ_PASSWORD || "guest",
+      hostname: env.RABBITMQ_HOST,
+      port: env.RABBITMQ_PORT,
+      username: env.RABBITMQ_USERNAME,
+      password: env.RABBITMQ_PASSWORD,
     })
     return connection
   } catch (error) {

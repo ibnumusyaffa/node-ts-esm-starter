@@ -4,6 +4,7 @@ import cors from "cors"
 import { handleError } from "@/shared/error.js"
 import { httpLogger } from "@/shared/logger.js"
 import routes from "@/routes.js"
+import env from "@/shared/env.js"
 
 const app = express()
 
@@ -21,7 +22,7 @@ app.use(
       await handleError(error)
     }
 
-    if (process.env.NODE_ENV === "development" && error instanceof Error) {
+    if (env.APP_DEBUG && error instanceof Error) {
       return res.status(500).send({
         message: error.message,
         stack: error.stack,
