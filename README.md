@@ -17,6 +17,7 @@ Opinionated project template for a Node.js & TypeScript apps with native ESM
 - [jsx-email](https://github.com/shellscape/jsx-email) for email templating
 - node-tap for testing
 - croner for scheduler
+- znv for type safe .env
 
 ## Quick Start
 

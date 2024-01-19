@@ -14,11 +14,6 @@ const config: Record<typeof env.NODE_ENV, Options> = {
         lax: true,
       },
     },
-    genReqId: function (req, res) {
-      const id = randomUUID()
-      res.setHeader("X-Request-Id", id)
-      return id
-    },
   },
   production: {
     redact: ["req.headers.authorization"],
@@ -33,5 +28,5 @@ const config: Record<typeof env.NODE_ENV, Options> = {
   },
 }
 
-export const httpLogger = pinoHttp(config.development)
+export const httpLogger = pinoHttp(config[env.NODE_ENV])
 export const logger = httpLogger.logger
