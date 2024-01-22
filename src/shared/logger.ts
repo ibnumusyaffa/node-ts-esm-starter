@@ -2,7 +2,7 @@ import { pinoHttp, Options } from "pino-http"
 import env from "@/shared/env.js"
 import { randomUUID } from "crypto"
 
-const config: Record<typeof env.NODE_ENV, Options> = {
+const config: Record<typeof env.LOG_MODE, Options> = {
   development: {
     transport: {
       target: "pino-http-print",
@@ -28,5 +28,5 @@ const config: Record<typeof env.NODE_ENV, Options> = {
   },
 }
 
-export const httpLogger = pinoHttp(config[env.NODE_ENV])
+export const httpLogger = pinoHttp(config[env.LOG_MODE])
 export const logger = httpLogger.logger
