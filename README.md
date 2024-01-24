@@ -2,10 +2,10 @@
 
 Opinionated project template for a Node.js & TypeScript apps with native ESM
 
-## Features
+## Stacks
 
 - Node.js 18+
-- TypeScript 5.3
+- TypeScript 5+
 - Native ESM Modules 
 - [tsx: Node.js enhanced to run TypeScript & ESM files](https://github.com/privatenumber/tsx)
 - [tsc-alias: Import path alias using `@/` prefix](https://github.com/justkey007/tsc-alias) 
@@ -15,9 +15,11 @@ Opinionated project template for a Node.js & TypeScript apps with native ESM
 - RabbitMQ for job queue
 - ESLint & Prettier — linting & formatting
 - [jsx-email](https://github.com/shellscape/jsx-email) for email templating
-- node-tap for testing
+- node-tap & supertest for testing
 - croner for scheduler
-- znv for type safe .env
+- znv for type safe env
+- Faker for generate fake data
+- dayjs for handling date-time
 
 ## Quick Start
 
