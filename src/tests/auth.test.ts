@@ -1,7 +1,7 @@
 import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { connection } from "@/shared/db/index.js"
+import { connection } from "@/common/database/index.js"
 import { createUser } from "./seeders/user.js"
 
 t.test("can login with valid data", async (t) => {

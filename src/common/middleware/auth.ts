@@ -1,9 +1,10 @@
-import jwt from "jsonwebtoken"
+
 import { Request, Response, NextFunction } from "express"
-import { users } from "@/shared/db/schema.js"
+import { users } from "@/common/database/schema.js"
 import { eq, and } from "drizzle-orm"
-import { db } from "@/shared/db/index.js"
-import env from "@/shared/env.js"
+import { db } from "@/common/database/index.js"
+import env from "@/config/env.js"
+import jwt from "jsonwebtoken"
 
 export async function isAuthenticated(
   req: Request,
@@ -53,10 +54,4 @@ export async function isAuthenticated(
   }
 }
 
-export function createToken(email: string) {
-  const token = jwt.sign({ email }, env.APP_KEY, {
-    expiresIn: "24h",
-  })
 
-  return token
-}

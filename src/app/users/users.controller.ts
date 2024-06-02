@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import { users } from "@/shared/db/schema.js"
-import { db } from "@/shared/db/index.js"
+import { users } from "@/common/database/schema.js"
+import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 import { eq } from "drizzle-orm"
 

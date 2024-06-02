@@ -5,8 +5,8 @@ Warning:
 */
 
 import { Cron } from "croner"
-import { logger } from "./shared/logger.js"
-import { forgotPasswordEmail } from "@/features/users/jobs/users.queue.js"
+import { logger } from "./libs/logger.js"
+import { forgotPasswordEmail } from "@/app/auth/jobs/users.queue.js"
 
 function handleError(e: unknown, job: Cron) {
   logger.error(`"${job.name}" job failed at ${job.currentRun()}`)

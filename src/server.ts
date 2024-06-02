@@ -1,9 +1,9 @@
 import "dotenv/config"
 import http from "http"
 import app from "@/app.js"
-import { handleError } from "@/shared/error.js"
+import { handleError } from "@/common/error.js"
 import process from "node:process"
-import env from "@/shared/env.js"
+import env from "@/config/env.js"
 
 process.on("uncaughtException", async (err) => {
   await handleError(err)

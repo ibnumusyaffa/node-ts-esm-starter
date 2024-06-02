@@ -1,10 +1,10 @@
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
 import cors from "cors"
-import { handleError } from "@/shared/error.js"
-import { httpLogger } from "@/shared/logger.js"
+import { handleError } from "@/libs/error.js"
+import { httpLogger } from "@/common/logger.js"
 import routes from "@/routes.js"
-import env from "@/shared/env.js"
+import env from "@/config/env.js"
 
 const app = express()
 

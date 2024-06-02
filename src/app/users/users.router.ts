@@ -1,8 +1,8 @@
 import express from "express"
-import { validate } from "@/shared/middleware/validate.js"
-import * as user from "@/features/users/users.controller.js"
-import * as schema from "@/features/users/users.schema.js"
-import { isAuthenticated } from "@/shared/auth.js"
+import { validate } from "@/common/middleware/validate.js"
+import * as user from "@/app/users/users.controller.js"
+import * as schema from "@/app/users/users.schema.js"
+import { isAuthenticated } from "@/libs/auth.js"
 
 const router = express.Router()
 

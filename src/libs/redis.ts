@@ -1,5 +1,5 @@
 import { Redis } from "ioredis"
-import env from "@/shared/env.js"
+import env from "@/config/env.js"
 
 export const connection = new Redis({
   maxRetriesPerRequest: null,

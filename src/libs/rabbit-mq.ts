@@ -1,5 +1,5 @@
 import amqp from "amqplib"
-import env from "@/shared/env.js"
+import env from "@/config/env.js"
 
 async function connect() {
   try {

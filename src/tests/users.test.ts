@@ -1,9 +1,9 @@
 import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { connection } from "@/shared/db/index.js"
+import { connection } from "@/common/database/index.js"
 import { faker } from "@faker-js/faker"
-import { createToken } from "@/shared/auth.js"
+import { createToken } from "@/libs/auth.js"
 import { createUser } from "./seeders/user.js"
 
 const loginUser = await createUser()

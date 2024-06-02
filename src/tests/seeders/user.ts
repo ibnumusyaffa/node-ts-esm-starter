@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker"
-import { users } from "@/shared/db/schema.js"
-import { db } from "@/shared/db/index.js"
+import { users } from "@/common/database/schema.js"
+import { db } from "@/common/database/index.js"
 import { eq, and } from "drizzle-orm"
 import bcrypt from "bcrypt"
 

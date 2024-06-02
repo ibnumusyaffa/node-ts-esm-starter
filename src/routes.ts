@@ -1,6 +1,6 @@
 import express from "express"
-import users from "@/features/users/users.router.js"
-import auth from "@/features/auth/auth.router.js"
+import users from "@/app/users/users.router.js"
+import auth from "@/app/auth/auth.router.js"
 const router = express.Router()
 router.get("/", (req, res) => {
   return res.send({ message: "It works" })

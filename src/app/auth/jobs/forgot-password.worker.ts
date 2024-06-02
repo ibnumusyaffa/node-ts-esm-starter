@@ -1,14 +1,15 @@
 import "dotenv/config"
-import { logger } from "@/shared/logger.js"
-import { connection } from "@/shared/rabbit-mq.js"
+import { logger } from "@/libs/logger.js"
+import { connection } from "@/libs/rabbit-mq.js"
 import { Message } from "./users.queue.js"
-import { transporter } from "@/shared/node-mailer.js"
-import { ForgotPasswordEmail } from "@/features/users/email/forgot-password.js"
+import { transporter } from "@/libs/node-mailer.js"
+import { ForgotPasswordEmail } from "@/app/auth/email/forgot-password.js"
 import { render } from "jsx-email"
-import { handleError } from "@/shared/error.js"
+import { handleError } from "@/common/error.js"
 
 const channel = await connection.createChannel()
 await channel.assertQueue("forgot-password", { durable: true })
+
 channel.consume(
   "forgot-password",
   async (msg) => {
