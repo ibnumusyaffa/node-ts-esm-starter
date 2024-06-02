@@ -1,4 +1,4 @@
-import { connection } from "@/libs/rabbit-mq.js"
+import { connection } from "@/common/rabbit-mq.js"
 
 export type Message = { name: string; link: string; email: string }
 

@@ -2,7 +2,7 @@ import express from "express"
 import { validate } from "@/common/middleware/validate.js"
 import * as user from "@/app/users/users.controller.js"
 import * as schema from "@/app/users/users.schema.js"
-import { isAuthenticated } from "@/libs/auth.js"
+import { isAuthenticated } from "@/common/middleware/auth.js"
 
 const router = express.Router()
 

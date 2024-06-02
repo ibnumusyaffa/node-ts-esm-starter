@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from "express"
-import { users } from "@/common/database/schema.js"
+
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
-import { eq } from "drizzle-orm"
 
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {
-    const users = await db.query.users.findMany()
+    const users = await db.selectFrom("user").selectAll().execute()
     return res.json(users)
   } catch (error) {
     return next(error)
@@ -26,8 +25,7 @@ export async function create(
 ) {
   try {
     const body = req.body
-
-    await db.insert(users).values({
+    db.insertInto("user").values({
       name: body.name,
       email: body.email,
       password: await bcrypt.hash(body.password, 10),
@@ -53,9 +51,12 @@ export async function update(
   try {
     const body = req.body
     const userId = parseInt(req.params.id)
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-    })
+
+    const user = await db
+      .selectFrom("user")
+      .where("id", "=", userId)
+      .selectAll()
+      .executeTakeFirst()
 
     if (!user) {
       return res.status(404).send({
@@ -64,9 +65,10 @@ export async function update(
     }
 
     await db
-      .update(users)
+      .updateTable("user")
       .set({ name: body.name, email: body.email })
-      .where(eq(users.id, userId))
+      .where("id", "=", userId)
+      .executeTakeFirst()
 
     return res.send({ message: "Successfully create data" })
   } catch (error) {
@@ -81,9 +83,11 @@ export async function detail(
 ) {
   try {
     const userId = parseInt(req.params.id)
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-    })
+    const user = await db
+      .selectFrom("user")
+      .where("id", "=", userId)
+      .selectAll()
+      .executeTakeFirst()
 
     if (!user) {
       return res.status(404).send({
@@ -103,9 +107,11 @@ export async function destroy(
 ) {
   try {
     const userId = parseInt(req.params.id)
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-    })
+    const user = await db
+      .selectFrom("user")
+      .where("id", "=", userId)
+      .selectAll()
+      .executeTakeFirst()
 
     if (!user) {
       return res.status(404).send({
@@ -113,7 +119,8 @@ export async function destroy(
       })
     }
 
-    await db.delete(users).where(eq(users.id, userId))
+    await db.deleteFrom("user").where("id", "=", userId).execute()
+
     return res.send({ message: "Successfully delete data" })
   } catch (error) {
     return next(error)

@@ -1,7 +1,7 @@
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
 import cors from "cors"
-import { handleError } from "@/libs/error.js"
+import { handleError } from "@/common/error.js"
 import { httpLogger } from "@/common/logger.js"
 import routes from "@/routes.js"
 import env from "@/config/env.js"

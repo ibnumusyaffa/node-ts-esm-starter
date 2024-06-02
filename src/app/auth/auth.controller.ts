@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from "express"
-import { users } from "@/common/database/schema.js"
-import { eq, and } from "drizzle-orm"
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 import env from "@/config/env.js"
@@ -9,9 +7,12 @@ import jwt from "jsonwebtoken"
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body
-    const user = await db.query.users.findFirst({
-      where: and(eq(users.email, email)),
-    })
+
+    const user = await db
+      .selectFrom("user")
+      .where("email", "=", email)
+      .selectAll()
+      .executeTakeFirst()
 
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" })
@@ -38,9 +39,11 @@ export async function profile(req: Request, res: Response, next: NextFunction) {
       return res.status(401).send({ message: "invalid" })
     }
 
-    const user = await db.query.users.findFirst({
-      where: and(eq(users.email, email)),
-    })
+    const user = await db
+      .selectFrom("user")
+      .where("email", "=", email)
+      .selectAll()
+      .executeTakeFirst()
 
     return res.json(user)
   } catch (error) {
@@ -60,9 +63,11 @@ export async function forgotPassword(
       return res.status(401).send({ message: "invalid" })
     }
 
-    const user = await db.query.users.findFirst({
-      where: and(eq(users.email, email)),
-    })
+    const user = await db
+      .selectFrom("user")
+      .where("email", "=", email)
+      .selectAll()
+      .executeTakeFirst()
 
     return res.json(user)
   } catch (error) {

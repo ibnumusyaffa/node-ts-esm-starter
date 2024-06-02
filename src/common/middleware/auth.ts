@@ -1,6 +1,4 @@
-
 import { Request, Response, NextFunction } from "express"
-import { users } from "@/common/database/schema.js"
 import { eq, and } from "drizzle-orm"
 import { db } from "@/common/database/index.js"
 import env from "@/config/env.js"
@@ -37,9 +35,13 @@ export async function isAuthenticated(
       }
 
       const payload = decoded as { email: string }
-      const user = await db.query.users.findFirst({
-        where: and(eq(users.email, payload.email)),
-      })
+
+      const user = await db
+        .selectFrom("user")
+        .where("email", "=", payload.email)
+        .selectAll()
+        .executeTakeFirst()
+
       if (!user) {
         return res.status(403).json({ message: "Invalid token" })
       }
@@ -53,5 +55,3 @@ export async function isAuthenticated(
     return next(error)
   }
 }
-
-

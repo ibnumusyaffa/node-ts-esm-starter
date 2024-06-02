@@ -5,7 +5,7 @@ Warning:
 */
 
 import { Cron } from "croner"
-import { logger } from "./libs/logger.js"
+import { logger } from "./common/logger.js"
 import { forgotPasswordEmail } from "@/app/auth/jobs/users.queue.js"
 
 function handleError(e: unknown, job: Cron) {
