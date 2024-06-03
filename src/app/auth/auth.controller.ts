@@ -4,6 +4,12 @@ import bcrypt from "bcrypt"
 import { createToken } from "@/common/auth.js"
 import { randomUUID } from "crypto"
 
+import { transporter } from "@/common/node-mailer.js"
+import { render } from "jsx-email"
+import { ForgotPasswordEmail } from "@/app/auth/email/forgot-password.js"
+import env from "@/config/env.js"
+import { forgotPasswordEmail } from "./jobs/users.queue.js"
+
 type LoginBody = {
   email: string
   password: string
@@ -77,19 +83,27 @@ export async function forgotPassword(
       .executeTakeFirst()
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: "We'll send a reset email if the account exists" })
+      return res.json({
+        message: "We'll send a reset email if the account exists",
+      })
     }
 
     await db.deleteFrom("password_resets").where("email", "=", email).execute()
+
+    const token = randomUUID()
     await db
       .insertInto("password_resets")
       .values({
         email: user.email,
-        token: randomUUID(),
+        token: token,
       })
       .execute()
+
+    forgotPasswordEmail({
+      name: user.name,
+      email: user.email,
+      link: `${env.FRONTEND_URL}/reset-password/${token}`,
+    })
 
     return res.json({
       messagee: "We'll send a reset email if the account exists",
@@ -121,7 +135,7 @@ export async function resetPassword(
       .executeTakeFirst()
 
     if (!reset) {
-      return res.status(401).json({ message: "Invalid" })
+      return res.status(401).json({ message: "Invalid token" })
     }
 
     //check expired from created_at
@@ -130,6 +144,10 @@ export async function resetPassword(
     const isExpired = diffInMinutes > 60
 
     if (!isExpired) {
+      await db
+        .deleteFrom("password_resets")
+        .where("email", "=", email)
+        .execute()
       return res.status(401).json({ message: "Expired token" })
     }
 
@@ -140,7 +158,7 @@ export async function resetPassword(
       .executeTakeFirst()
 
     //delete token
-    db.deleteFrom("password_resets").where("email", "=", email).execute()
+    await db.deleteFrom("password_resets").where("email", "=", email).execute()
 
     return res.json({ messaage: "Success" })
   } catch (error) {

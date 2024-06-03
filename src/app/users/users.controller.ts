@@ -3,10 +3,49 @@ import { Request, Response, NextFunction } from "express"
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 
-export async function list(req: Request, res: Response, next: NextFunction) {
+type ListParams = {
+  page?: string
+  limit?: string
+  keyword?: string
+}
+
+export async function list(
+  req: Request<{}, {}, {}, ListParams>,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const users = await db.selectFrom("users").selectAll().execute()
-    return res.json(users)
+    const page = req.query.page ? Number(req.query.page) : 1
+    const limit = req.query.limit ? Number(req.query.limit) : 10
+    const offset = (page - 1) * limit
+
+    const keyword = req.query.keyword
+    let query = db.selectFrom("users")
+
+    if (keyword) {
+      query = query.where("name", "like", `%${keyword}%`)
+    }
+
+    const users = await query
+      .selectAll()
+      .orderBy("id")
+      .limit(limit)
+      .offset(offset)
+      .execute()
+
+    const count = await query
+      .select((eb) => eb.fn.countAll().as("total"))
+      .executeTakeFirst()
+
+    const meta = {
+      total: count?.total,
+      page,
+      limit,
+    }
+    return res.send({
+      meta,
+      data: users,
+    })
   } catch (error) {
     return next(error)
   }
@@ -30,7 +69,7 @@ export async function create(
       .values({
         name: body.name,
         email: body.email,
-        password: await bcrypt.hash(body.password, 10)
+        password: await bcrypt.hash(body.password, 10),
       })
       .execute()
 

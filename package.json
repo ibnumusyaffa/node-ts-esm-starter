@@ -14,10 +14,10 @@
     "format:check": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|jsx|tsx)\"",
     "db:generate": "npx drizzle-kit generate:mysql",
     "db:migrate": "npx tsx ./src/shared/db/migrate.ts",
-    "email:preview": "email preview ./src/features/users/email",
+    "email:preview": "email preview ./src/app",
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
     "scheduler:run": "node ./dist/scheduler.js",
-    "user:worker:forgot-password": "tsx  ./src/features/users/jobs/forgot-password.worker.ts",
+    "user:worker:forgot-password": "tsx ./src/app/auth/jobs/forgot-password.worker.ts",
     "test": "NODE_ENV=test LOG_MODE=test tap run --include='src/tests/**/*.test.+(js|ts|jsx|tsx)'"
   },
   "keywords": [],

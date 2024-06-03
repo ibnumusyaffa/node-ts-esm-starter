@@ -8,13 +8,14 @@ export const env = parseEnv(process.env, {
     .default("development"),
   PORT: port().default(3000),
   LOG_MODE: z
-  .enum(["production", "development", "test"])
-  .default("development"),
+    .enum(["production", "development", "test"])
+    .default("development"),
 
   APP_NAME: z.string().default("MyApp"),
   APP_KEY: z.string().min(1),
   APP_DEBUG: z.boolean().default(true),
   APP_URL: z.string().default("http://localhost:3000"),
+  FRONTEND_URL: z.string().default("http://localhost:5000"),
 
   //DB
   DB_USER: z.string().min(1),

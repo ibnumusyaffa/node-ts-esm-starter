@@ -8,29 +8,29 @@ import { render } from "jsx-email"
 import { handleError } from "@/common/error.js"
 
 const channel = await connection.createChannel()
-await channel.assertQueue("forgot-password", { durable: true })
+const queueName = "forgot-password"
+await channel.assertQueue(queueName, { durable: true })
 
 channel.consume(
-  "forgot-password",
+  queueName,
   async (msg) => {
     try {
       if (msg === null) {
         return
       }
-
+      logger.info("start forgot-password")
       const data: Message = JSON.parse(msg.content.toString())
+      logger.info(data.email)
       const html = await render(ForgotPasswordEmail(data))
       await transporter.sendMail({
         to: data.email,
         subject: "Forgot Password",
         html: html,
       })
-      logger.info("sent")
+      logger.info("end forgot-password")
       channel.ack(msg)
     } catch (error) {
-      if (error instanceof Error) {
-        handleError(error)
-      }
+      handleError(error)
     }
   },
   { noAck: false }
