@@ -2,8 +2,18 @@ import { Request, Response, NextFunction } from "express"
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 import { createToken } from "@/common/auth.js"
+import { randomUUID } from "crypto"
 
-export async function login(req: Request, res: Response, next: NextFunction) {
+type LoginBody = {
+  email: string
+  password: string
+}
+
+export async function login(
+  req: Request<{}, {}, LoginBody>,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { email, password } = req.body
 
@@ -22,7 +32,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: "Invalid email or password" })
     }
     const token = createToken(user.email)
-    return res.json({ message: "User registered successfully", token })
+    return res.json({ token })
   } catch (error) {
     return next(error)
   }
@@ -48,17 +58,17 @@ export async function profile(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+type ForgotPasswordBody = {
+  email: string
+}
+
 export async function forgotPassword(
-  req: Request,
+  req: Request<{}, {}, ForgotPasswordBody>,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const email = req.user?.email
-
-    if (!email) {
-      return res.status(401).json({ message: "invalid" })
-    }
+    const email = req.body.email
 
     const user = await db
       .selectFrom("users")
@@ -66,7 +76,73 @@ export async function forgotPassword(
       .selectAll()
       .executeTakeFirst()
 
-    return res.json(user)
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "We'll send a reset email if the account exists" })
+    }
+
+    await db.deleteFrom("password_resets").where("email", "=", email).execute()
+    await db
+      .insertInto("password_resets")
+      .values({
+        email: user.email,
+        token: randomUUID(),
+      })
+      .execute()
+
+    return res.json({
+      messagee: "We'll send a reset email if the account exists",
+    })
+  } catch (error) {
+    return next(error)
+  }
+}
+
+type ResetPasswordBody = {
+  email: string
+  token: string
+  password: string
+}
+export async function resetPassword(
+  req: Request<{}, {}, ResetPasswordBody>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { token, email, password } = req.body
+
+    //check token & email validity
+    const reset = await db
+      .selectFrom("password_resets")
+      .where("email", "=", email)
+      .where("token", "=", token)
+      .selectAll()
+      .executeTakeFirst()
+
+    if (!reset) {
+      return res.status(401).json({ message: "Invalid" })
+    }
+
+    //check expired from created_at
+    const curTime = new Date().getTime()
+    const diffInMinutes = (curTime - reset.created_at.getTime()) / (1000 * 60)
+    const isExpired = diffInMinutes > 60
+
+    if (!isExpired) {
+      return res.status(401).json({ message: "Expired token" })
+    }
+
+    await db
+      .updateTable("users")
+      .set({ password: await bcrypt.hash(password, 10) })
+      .where("email", "=", email)
+      .executeTakeFirst()
+
+    //delete token
+    db.deleteFrom("password_resets").where("email", "=", email).execute()
+
+    return res.json({ messaage: "Success" })
   } catch (error) {
     return next(error)
   }

@@ -1,6 +1,13 @@
-import type { Kysely } from "kysely";
+import type { Kysely } from "kysely"
+import bcrypt from "bcrypt"
 
 export async function seed(db: Kysely<any>): Promise<void> {
-  // seed code goes here...
-  // note: this function is mandatory. you must implement this function.
+  await db
+    .insertInto("users")
+    .values({
+      name: "admin",
+      email: "admin@example.com",
+      password: await bcrypt.hash("Password123*", 10),
+    })
+    .execute()
 }

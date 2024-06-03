@@ -25,11 +25,14 @@ export async function create(
 ) {
   try {
     const body = req.body
-    db.insertInto("users").values({
-      name: body.name,
-      email: body.email,
-      password: await bcrypt.hash(body.password, 10),
-    })
+    await db
+      .insertInto("users")
+      .values({
+        name: body.name,
+        email: body.email,
+        password: await bcrypt.hash(body.password, 10)
+      })
+      .execute()
 
     return res.status(201).json({ message: "Successfully create data" })
   } catch (error) {

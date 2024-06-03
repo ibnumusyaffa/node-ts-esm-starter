@@ -6,4 +6,7 @@ const router = express.Router()
 router.post("/login", auth.login)
 router.get("/profile", isAuthenticated, auth.profile)
 
+router.post("/forgot-password", auth.forgotPassword)
+router.post("/reset-password", auth.resetPassword)
+
 export default router
