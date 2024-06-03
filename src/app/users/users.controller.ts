@@ -5,46 +5,46 @@ import bcrypt from "bcrypt"
 
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {
-    const users = await db.selectFrom("user").selectAll().execute()
+    const users = await db.selectFrom("users").selectAll().execute()
     return res.json(users)
   } catch (error) {
     return next(error)
   }
 }
 
-type CreateReqBody = {
+type CreateBody = {
   name: string
   email: string
   password: string
 }
 
 export async function create(
-  req: Request<{}, {}, CreateReqBody>,
+  req: Request<{}, {}, CreateBody>,
   res: Response,
   next: NextFunction
 ) {
   try {
     const body = req.body
-    db.insertInto("user").values({
+    db.insertInto("users").values({
       name: body.name,
       email: body.email,
       password: await bcrypt.hash(body.password, 10),
     })
 
-    return res.status(201).send({ message: "Successfully create data" })
+    return res.status(201).json({ message: "Successfully create data" })
   } catch (error) {
     return next(error)
   }
 }
 
-type UpdateReqBody = {
+type UpdateBody = {
   name: string
   email: string
   password: string
 }
 
 export async function update(
-  req: Request<{ id: string }, {}, UpdateReqBody>,
+  req: Request<{ id: string }, {}, UpdateBody>,
   res: Response,
   next: NextFunction
 ) {
@@ -53,24 +53,24 @@ export async function update(
     const userId = parseInt(req.params.id)
 
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("id", "=", userId)
       .selectAll()
       .executeTakeFirst()
 
     if (!user) {
-      return res.status(404).send({
+      return res.status(404).json({
         message: "not found",
       })
     }
 
     await db
-      .updateTable("user")
+      .updateTable("users")
       .set({ name: body.name, email: body.email })
       .where("id", "=", userId)
       .executeTakeFirst()
 
-    return res.send({ message: "Successfully create data" })
+    return res.json({ message: "Successfully create data" })
   } catch (error) {
     return next(error)
   }
@@ -84,17 +84,17 @@ export async function detail(
   try {
     const userId = parseInt(req.params.id)
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("id", "=", userId)
       .selectAll()
       .executeTakeFirst()
 
     if (!user) {
-      return res.status(404).send({
+      return res.status(404).json({
         message: "not found",
       })
     }
-    return res.send(user)
+    return res.json(user)
   } catch (error) {
     return next(error)
   }
@@ -108,20 +108,20 @@ export async function destroy(
   try {
     const userId = parseInt(req.params.id)
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("id", "=", userId)
       .selectAll()
       .executeTakeFirst()
 
     if (!user) {
-      return res.status(404).send({
+      return res.status(404).json({
         message: "not found",
       })
     }
 
-    await db.deleteFrom("user").where("id", "=", userId).execute()
+    await db.deleteFrom("users").where("id", "=", userId).execute()
 
-    return res.send({ message: "Successfully delete data" })
+    return res.json({ message: "Successfully delete data" })
   } catch (error) {
     return next(error)
   }

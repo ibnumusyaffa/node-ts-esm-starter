@@ -15,7 +15,6 @@ export const validate = (validations: ValidationChain[]) => {
     }
 
     const arrayOfErrors = errors.array() as FieldValidationError[]
-
     res.status(422).json({ errors: formatErrors(arrayOfErrors) })
   }
 }

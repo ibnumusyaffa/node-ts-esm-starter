@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express"
-import { eq, and } from "drizzle-orm"
 import { db } from "@/common/database/index.js"
 import env from "@/config/env.js"
 import jwt from "jsonwebtoken"
@@ -37,7 +36,7 @@ export async function isAuthenticated(
       const payload = decoded as { email: string }
 
       const user = await db
-        .selectFrom("user")
+        .selectFrom("users")
         .where("email", "=", payload.email)
         .selectAll()
         .executeTakeFirst()
@@ -54,4 +53,10 @@ export async function isAuthenticated(
   } catch (error) {
     return next(error)
   }
+}
+
+export function createToken(email: string) {
+  return jwt.sign({ email: email }, env.APP_KEY, {
+    expiresIn: "24h",
+  })
 }

@@ -1,7 +1,5 @@
 import { faker } from "@faker-js/faker"
-import { users } from "@/common/database/schema.js"
 import { db } from "@/common/database/index.js"
-import { eq, and } from "drizzle-orm"
 import bcrypt from "bcrypt"
 
 export async function createUser() {
@@ -10,15 +8,20 @@ export async function createUser() {
     email: faker.internet.email(),
     password: faker.internet.password({ length: 8 }),
   }
-  await db.insert(users).values({
-    name: user.name,
-    email: user.email,
-    password: await bcrypt.hash(user.password, 10),
-  })
+  await db
+    .insertInto("users")
+    .values({
+      name: user.name,
+      email: user.email,
+      password: await bcrypt.hash(user.password, 10),
+    })
+    .execute()
 
-  const createdUser = await db.query.users.findFirst({
-    where: and(eq(users.email, user.email)),
-  })
+  const createdUser = await db
+    .selectFrom("users")
+    .where("email", "=", user.email)
+    .selectAll()
+    .executeTakeFirst()
 
   if (!createdUser) {
     throw new Error("created user is not found")

@@ -1,7 +1,7 @@
 import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { connection } from "@/common/database/index.js"
+import { db } from "@/common/database/index.js"
 import { createUser } from "./seeders/user.js"
 
 t.test("can login with valid data", async (t) => {
@@ -13,17 +13,13 @@ t.test("can login with valid data", async (t) => {
     email: user.email,
     password: user.password,
   })
-  
+
   // assert login response
   t.hasOwnPropsOnly(respLogin.body, ["message", "token"])
 
   // profile
   const respProfile = await request(app)
-    .post("/auth/profile")
-    .send({
-      email: user.email,
-      password: user.password,
-    })
+    .get("/auth/profile")
     .auth(respLogin.body.token, { type: "bearer" })
   // assert profile response
   t.equal(user.name, respProfile.body.name)
@@ -42,6 +38,6 @@ t.test("cant login with invalid data", async (t) => {
   t.equal(401, response.status)
 })
 
-t.teardown(() => {
-  connection.end()
+t.teardown(async () => {
+  await db.destroy()
 })

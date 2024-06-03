@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from "express"
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
-import env from "@/config/env.js"
-import jwt from "jsonwebtoken"
+import { createToken } from "@/common/auth.js"
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body
 
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("email", "=", email)
       .selectAll()
       .executeTakeFirst()
@@ -22,9 +21,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid email or password" })
     }
-    const token = jwt.sign({ email: user.email }, env.APP_KEY, {
-      expiresIn: "24h",
-    })
+    const token = createToken(user.email)
     return res.json({ message: "User registered successfully", token })
   } catch (error) {
     return next(error)
@@ -36,11 +33,11 @@ export async function profile(req: Request, res: Response, next: NextFunction) {
     const email = req.user?.email
 
     if (!email) {
-      return res.status(401).send({ message: "invalid" })
+      return res.status(401).json({ message: "invalid" })
     }
 
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("email", "=", email)
       .selectAll()
       .executeTakeFirst()
@@ -60,11 +57,11 @@ export async function forgotPassword(
     const email = req.user?.email
 
     if (!email) {
-      return res.status(401).send({ message: "invalid" })
+      return res.status(401).json({ message: "invalid" })
     }
 
     const user = await db
-      .selectFrom("user")
+      .selectFrom("users")
       .where("email", "=", email)
       .selectAll()
       .executeTakeFirst()

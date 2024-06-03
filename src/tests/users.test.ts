@@ -1,9 +1,9 @@
 import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { connection } from "@/common/database/index.js"
+import { db } from "@/common/database/index.js"
 import { faker } from "@faker-js/faker"
-import { createToken } from "@/libs/auth.js"
+import { createToken } from "@/common/auth.js"
 import { createUser } from "./seeders/user.js"
 
 const loginUser = await createUser()
@@ -67,6 +67,6 @@ t.test("delete user", async (t) => {
   })
 })
 
-t.teardown(() => {
-  connection.end()
+t.teardown(async () => {
+  await db.destroy()
 })

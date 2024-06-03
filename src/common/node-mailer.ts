@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer"
 import env from "@/config/env.js"
+
 export const transporter = nodemailer.createTransport({
   pool: true,
   host: env.MAIL_HOST,

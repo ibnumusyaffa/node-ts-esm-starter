@@ -12,26 +12,26 @@ app.use(httpLogger)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("*", cors({ origin: "*" }))
-
 app.use("/static", express.static("storage/public"))
+
 app.use(routes)
 
-app.use(
-  async (error: unknown, req: Request, res: Response, next: NextFunction) => {
-    if (error instanceof Error) {
-      await handleError(error)
-    }
+app.use(async (error: unknown, req: Request, res: Response) => {
+  const instanceOfError = error instanceof Error
+  if (instanceOfError) {
+    await handleError(error)
+  }
 
-    if (env.APP_DEBUG && error instanceof Error) {
-      return res.status(500).send({
-        message: error.message,
-        stack: error.stack,
-      })
-    }
+  if (env.APP_DEBUG) {
     return res.status(500).send({
-      message: "internal server error",
+      message: instanceOfError ? error.message : "Unknown error",
+      stack: instanceOfError ? error.stack : "",
     })
   }
-)
+
+  return res.status(500).send({
+    message: "Something went wrong",
+  })
+})
 
 export default app

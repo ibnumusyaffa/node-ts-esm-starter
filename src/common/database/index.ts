@@ -1,9 +1,9 @@
 import env from "@/config/env.js"
-import { Database } from "./types.js" 
-import { createPool } from "mysql2" 
+import { Database } from "./types/index.js"
+import { createPool } from "mysql2"
 import { Kysely, MysqlDialect } from "kysely"
 
-const dialect = new MysqlDialect({
+export const dialect = new MysqlDialect({
   pool: createPool({
     database: env.DB_NAME,
     host: env.DB_HOST,
