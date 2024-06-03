@@ -16,20 +16,23 @@ app.use("/static", express.static("storage/public"))
 
 app.use(routes)
 
-app.use(async (error: unknown, req: Request, res: Response) => {
-  const instanceOfError = error instanceof Error
-  if (instanceOfError) {
-    await handleError(error)
-  }
+app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
+  handleError(error)
 
   if (env.APP_DEBUG) {
-    return res.status(500).send({
-      message: instanceOfError ? error.message : "Unknown error",
-      stack: instanceOfError ? error.stack : "",
+    if (error instanceof Error) {
+      return res.status(500).json({
+        message: error.message,
+        stack: error.stack?.split("\n").map((s) => s.trim()),
+      })
+    }
+    return res.status(500).json({
+      message: "Unknown error",
+      stack: [],
     })
   }
 
-  return res.status(500).send({
+  return res.status(500).json({
     message: "Something went wrong",
   })
 })

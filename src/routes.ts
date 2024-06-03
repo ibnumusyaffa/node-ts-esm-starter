@@ -4,7 +4,7 @@ import auth from "@/app/auth/auth.routes.js"
 const router = express.Router()
 
 router.get("/", (req, res) => {
-  return res.send({ message: "It works" })
+  return res.send({ message: "hello" })
 })
 router.use("/users", users)
 router.use("/auth", auth)

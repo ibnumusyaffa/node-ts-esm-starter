@@ -68,8 +68,6 @@
     "pino-http": "^10.1.0",
     "pino-http-print": "^3.1.0",
     "tsx": "^4.11.0",
-    "youch": "^3.3.3",
-    "youch-terminal": "^2.2.3",
     "znv": "^0.4.0",
     "zod": "^3.23.8"
   },

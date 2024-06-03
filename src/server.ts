@@ -5,8 +5,8 @@ import http from "http"
 import process from "node:process"
 import app from "@/app.js"
 
-process.on("uncaughtException", async (err) => {
-  await handleError(err)
+process.on("uncaughtException", (err) => {
+  handleError(err)
   process.exit(1)
 })
 

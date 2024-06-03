@@ -29,7 +29,7 @@ channel.consume(
       channel.ack(msg)
     } catch (error) {
       if (error instanceof Error) {
-        await handleError(error)
+        handleError(error)
       }
     }
   },
