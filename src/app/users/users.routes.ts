@@ -6,7 +6,7 @@ import { isAuthenticated } from "@/common/auth.js"
 
 const router = express.Router()
 
-// router.use(isAuthenticated)
+router.use(isAuthenticated)
 
 router.get("/", user.list)
 router.post("/", validate(schema.createUser), user.create)

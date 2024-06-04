@@ -1,12 +1,13 @@
 import "dotenv/config"
 import { logger } from "@/common/logger.js"
-import { connection } from "@/common/rabbit-mq.js"
+import { connect } from "@/common/rabbit-mq.js"
 import { Message } from "./users.queue.js"
 import { transporter } from "@/common/node-mailer.js"
 import { ForgotPasswordEmail } from "@/app/auth/email/forgot-password.js"
 import { render } from "jsx-email"
 import { handleError } from "@/common/error.js"
 
+const connection = await connect()
 const channel = await connection.createChannel()
 const queueName = "forgot-password"
 await channel.assertQueue(queueName, { durable: true })
