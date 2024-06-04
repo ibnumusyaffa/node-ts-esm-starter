@@ -46,13 +46,26 @@ npm run dev
 
 ## Available scripts
 
-- `npm run dev` — Starts the application in development mode at.
-- `npm run build` — Compile the application.
-- `npm start` — Starts the application in production mode.
-- `npm run lint` — Check code using ESLint.
-- `npm run lint:fix` — Fix autofixable ESLint problem.
-- `npm run format:all` — Format code using Prettier for all files.
-- `npm run format:check` — Check code format using prettier.
-- `npm run db:generate` — Generate migration from changed schema.
+- `npm run dev` - Starts the application in development mode at.
+- `npm run build` - Compile the application.
+- `npm start` - Starts the application in production mode.
+- `npm run lint` - Check code using ESLint.
+- `npm run lint:fix` - Fix autofixable ESLint problem.
+- `npm run format:all` - Format code using Prettier for all files.
+- `npm run format:check` - Check code format using prettier.
+- `npm run db:generate` - Generate migration from changed schema.
 - `npm run db:migrate` - Apply migration to database.
 - `npm run worker:send-email` - Run example worker.
+
+## Kysely/migration scripts
+
+- `npx kysely migrate:down` - Undo the last/specified migration that was run.
+- `npx kysely migrate:latest` -Update the database schema to the latest version.
+- `npx kysely migrate:list` - List both completed and pending migrations.
+- `npx kysely migrate:make` - Create a new migration file.
+- `npx kysely migrate:rollback` - Rollback all the completed migrations.
+- `npx kysely seed:run` - Run seed files.
+- `npx kysely seed:make` - Create a new seed file.
+- `npx kysely migrate:up` - Run the next migration that has not yet been run.
+- `npx kysely migrate` - Migrate the database schema.
+- `npx kysely seed` - Populate your database with test or seed data independent of your migration files

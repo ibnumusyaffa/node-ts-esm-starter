@@ -3,12 +3,8 @@ import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 import { createToken } from "@/common/auth.js"
 import { randomUUID } from "crypto"
-
-import { transporter } from "@/common/node-mailer.js"
-import { render } from "jsx-email"
-import { ForgotPasswordEmail } from "@/app/auth/email/forgot-password.js"
 import env from "@/config/env.js"
-import { forgotPasswordEmail } from "./jobs/users.queue.js"
+import { sendforgotPasswordEmail } from "./jobs/users.queue.js"
 
 type LoginBody = {
   email: string
@@ -99,7 +95,7 @@ export async function forgotPassword(
       })
       .execute()
 
-    forgotPasswordEmail({
+    sendforgotPasswordEmail({
       name: user.name,
       email: user.email,
       link: `${env.FRONTEND_URL}/reset-password/${token}`,
