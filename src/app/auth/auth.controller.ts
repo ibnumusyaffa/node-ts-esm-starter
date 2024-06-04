@@ -91,17 +91,20 @@ export async function forgotPassword(
       .insertInto("password_resets")
       .values({
         email: user.email,
-        token: token,
+        token: await bcrypt.hash(token, 10),
       })
       .execute()
 
+    // if (env.NODE_ENV !== "test") {
     sendforgotPasswordEmail({
       name: user.name,
       email: user.email,
       link: `${env.FRONTEND_URL}/reset-password/${token}`,
     })
+    // }
 
     return res.json({
+      token: env.NODE_ENV === "test" ? token : undefined,
       messagee: "We'll send a reset email if the account exists",
     })
   } catch (error) {
@@ -126,11 +129,15 @@ export async function resetPassword(
     const reset = await db
       .selectFrom("password_resets")
       .where("email", "=", email)
-      .where("token", "=", token)
       .selectAll()
       .executeTakeFirst()
 
     if (!reset) {
+      return res.status(401).json({ message: "reset not found" })
+    }
+
+    const passwordMatch = await bcrypt.compare(token, reset.token)
+    if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid token" })
     }
 

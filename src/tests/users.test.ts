@@ -36,7 +36,7 @@ t.test("list users", async (t) => {
   const response = await request(app)
     .get("/users")
     .auth(createToken(loginUser.email), { type: "bearer" })
-  t.type(response.body, "array")
+  t.type(response.body.data, "array")
 })
 
 t.test("detail user", async (t) => {

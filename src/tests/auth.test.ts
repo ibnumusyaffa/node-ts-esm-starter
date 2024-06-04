@@ -15,7 +15,7 @@ t.test("can login with valid data", async (t) => {
   })
 
   // assert login response
-  t.hasOwnPropsOnly(respLogin.body, ["message", "token"])
+  t.hasOwnPropsOnly(respLogin.body, ["token"])
 
   // profile
   const respProfile = await request(app)
