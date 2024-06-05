@@ -46,7 +46,7 @@ services:
       - starterkit-node
 
 volumes:
-  dbmysql:
+  dbmysql-volume:
 
 networks:
   starterkit-node:
