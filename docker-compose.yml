@@ -2,6 +2,7 @@ version: "3"
 services:
   app-node-ts:
     container_name: app-node-ts
+    restart: always
     build: ./
     env_file:
       - .env
@@ -15,6 +16,7 @@ services:
   forgot-password-worker:
     build: ./
     command: npm run user:worker:forgot-password
+    restart: always
     env_file:
       - .env
     depends_on:
@@ -24,15 +26,18 @@ services:
 
   redis:
     image: redis:7.2.5
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3-management
+    restart: always
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
 
   mysql:
     image: mysql:8.0-debian
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: testdb
