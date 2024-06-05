@@ -1,0 +1,35 @@
+version: "3"
+services:
+  starterkit-be:
+    container_name: starterkit-be
+    build: ./
+    env_file:
+      - .env
+    ports:
+      - 7777:4000
+    depends_on:
+      - rabbitmq
+      - redis
+      - mysql
+
+  redis:
+    image: redis:7.2.5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
