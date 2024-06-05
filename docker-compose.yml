@@ -17,6 +17,10 @@ services:
   forgot-password-worker:
     build: ./
     command: npm run user:worker:forgot-password
+    depends_on:
+      - rabbitmq
+      - redis
+      - dbmysql
     networks:
       - starterkit-network
 
@@ -33,21 +37,20 @@ services:
     networks:
       - starterkit-network
 
-  dbmysql:
-    image: mysql:8.0
+  mysql:
+    image: mysql:8.0-debian
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: testdb
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
-      - dbmysql-volume:/var/lib/mysql
+      - mysql:/var/lib/mysql
     networks:
       - starterkit-network
 
 volumes:
-  dbmysql-volume:
+  mysql:
 
 networks:
   starterkit-network:
-    driver: bridge
