@@ -1,7 +1,7 @@
 version: "3"
 services:
-  starterkit-be:
-    container_name: starterkit-be
+  app:
+    container_name: app
     build: ./
     env_file:
       - .env
@@ -33,7 +33,7 @@ services:
     networks:
       - starterkit-node
 
-  mysql:
+  dbmysql:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -46,7 +46,7 @@ services:
       - starterkit-node
 
 volumes:
-  mysql:
+  dbmysql:
 
 networks:
   starterkit-node:
