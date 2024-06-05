@@ -11,8 +11,6 @@ services:
       - rabbitmq
       - redis
       - mysql
-    networks:
-      - starterkit-network
 
   forgot-password-worker:
     build: ./
@@ -23,21 +21,15 @@ services:
       - rabbitmq
       - redis
       - mysql
-    networks:
-      - starterkit-network
 
   redis:
     image: redis:7.2.5
-    networks:
-      - starterkit-network
 
   rabbitmq:
     image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    networks:
-      - starterkit-network
 
   mysql:
     image: mysql:8.0-debian
@@ -47,12 +39,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
-      - mysql:/var/lib/mysql
-    networks:
-      - starterkit-network
+      - mysqldata:/var/lib/mysql
 
 volumes:
-  mysql:
-
-networks:
-  starterkit-network:
+  mysqldata:
