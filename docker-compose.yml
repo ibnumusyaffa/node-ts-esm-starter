@@ -1,7 +1,7 @@
 version: "3"
 services:
-  app:
-    container_name: app
+  app-node-ts:
+    container_name: app-node-ts
     build: ./
     env_file:
       - .env

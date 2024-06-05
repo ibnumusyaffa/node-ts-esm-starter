@@ -1,3 +1,3 @@
 set -e
-docker exec -i starterkit-be npx kysely migrate:latest
-docker exec -i starterkit-be npx kysely seed:run
+docker exec -i app-node-ts npx kysely migrate:latest
+docker exec -i app-node-ts npx kysely seed:run
