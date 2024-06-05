@@ -50,3 +50,4 @@ volumes:
 
 networks:
   starterkit-node:
+    driver: bridge
