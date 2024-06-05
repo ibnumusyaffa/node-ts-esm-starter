@@ -17,6 +17,8 @@ services:
   forgot-password-worker:
     build: ./
     command: npm run user:worker:forgot-password
+    env_file:
+      - .env
     depends_on:
       - rabbitmq
       - redis
