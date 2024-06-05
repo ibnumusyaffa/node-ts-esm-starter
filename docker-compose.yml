@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     ports:
-      - 7800:4000
+      - 7900:4000
     depends_on:
       - rabbitmq
       - redis
