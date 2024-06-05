@@ -6,10 +6,7 @@ export const transporter = nodemailer.createTransport({
   host: env.MAIL_HOST,
   port: env.MAIL_PORT,
   secure: true,
-  from: {
-    name: env.MAIL_FROM_NAME,
-    address: env.MAIL_FROM_ADDRESS,
-  },
+  from: `"${env.MAIL_FROM_NAME}" <${env.MAIL_FROM_ADDRESS}>`,
   auth: {
     user: env.MAIL_USERNAME,
     pass: env.MAIL_PASSWORD,
