@@ -40,7 +40,7 @@ export const env = parseEnv(process.env, {
   MAIL_PORT: z.number(),
   MAIL_USERNAME: z.string().min(1),
   MAIL_PASSWORD: z.string().min(1),
-  MAIL_FROM_NAME: z.string().optional(),
+  MAIL_FROM_NAME: z.string(),
   MAIL_FROM_ADDRESS: z.string().min(1),
 })
 

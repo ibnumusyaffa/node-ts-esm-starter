@@ -26,9 +26,13 @@ channel.consume(
       logger.info(data.email)
       const html = await render(ForgotPasswordEmail(data))
       await transporter.sendMail({
-        from: env.MAIL_FROM_NAME
-        ? `"${env.MAIL_FROM_NAME}" <${env.MAIL_FROM_ADDRESS}>`
-        : env.MAIL_FROM_ADDRESS,
+        // from: env.MAIL_FROM_NAME
+        //   ? `"${env.MAIL_FROM_NAME}" <${env.MAIL_FROM_ADDRESS}>`
+        //   : env.MAIL_FROM_ADDRESS,
+        from: {
+          name: env.MAIL_FROM_NAME,
+          address: env.MAIL_FROM_ADDRESS,
+        },
         to: data.email,
         subject: "Forgot Password",
         html: html,
