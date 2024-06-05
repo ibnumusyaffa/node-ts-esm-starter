@@ -30,9 +30,7 @@ export const ForgotPasswordEmail = ({ name, link }: Props) => (
             '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
         }}
       >
-        <Container
-         className="mx-auto py-[20px] px-[12px] md:py-[40px] md:px-0 lg:py-[48px] lg:px-0"
-        >
+        <Container className="mx-auto py-[20px] px-[12px] md:py-[40px] md:px-0 lg:py-[48px] lg:px-0">
           <Img
             src="https://jsx.email/assets/demo/koala-logo.png"
             width="170"
@@ -44,8 +42,8 @@ export const ForgotPasswordEmail = ({ name, link }: Props) => (
           />
           <p className="text-[16px] text-gray-800">Hi {name},</p>
           <p className="text-[16px] text-gray-800">
-            Someone recently requested a password change for your Dropbox
-            account. If this was you, you can set a new password here:
+            Someone recently requested a password change for your account. If
+            this was you, you can set a new password here:
           </p>
           <Section>
             <Button

@@ -39,6 +39,7 @@ export async function list(
 
     const meta = {
       total: count?.total,
+      totalPages: Math.ceil(Number(count?.total) / limit),
       page,
       limit,
     }
@@ -112,7 +113,7 @@ export async function update(
       .where("id", "=", userId)
       .executeTakeFirst()
 
-    return res.json({ message: "Successfully create data" })
+    return res.json({ message: "Successfully update data" })
   } catch (error) {
     return next(error)
   }

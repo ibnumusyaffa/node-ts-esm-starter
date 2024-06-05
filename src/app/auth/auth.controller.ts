@@ -95,17 +95,15 @@ export async function forgotPassword(
       })
       .execute()
 
-    // if (env.NODE_ENV !== "test") {
     sendforgotPasswordEmail({
       name: user.name,
       email: user.email,
-      link: `${env.FRONTEND_URL}/reset-password/${token}`,
+      link: `${env.FRONTEND_URL}/reset-password/${token}?email=${user.email}`,
     })
-    // }
 
     return res.json({
       token: env.NODE_ENV === "test" ? token : undefined,
-      messagee: "We'll send a reset email if the account exists",
+      message: "We'll send a reset email if the account exists",
     })
   } catch (error) {
     return next(error)
@@ -133,7 +131,7 @@ export async function resetPassword(
       .executeTakeFirst()
 
     if (!reset) {
-      return res.status(401).json({ message: "reset not found" })
+      return res.status(401).json({ message: "Reset not found" })
     }
 
     const passwordMatch = await bcrypt.compare(token, reset.token)
@@ -163,7 +161,7 @@ export async function resetPassword(
     //delete token
     await db.deleteFrom("password_resets").where("email", "=", email).execute()
 
-    return res.json({ messaage: "Success" })
+    return res.json({ message: "Successfully updated the password" })
   } catch (error) {
     return next(error)
   }

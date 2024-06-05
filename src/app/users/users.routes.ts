@@ -10,6 +10,7 @@ router.use(isAuthenticated)
 
 router.get("/", user.list)
 router.post("/", validate(schema.createUser), user.create)
+router.put("/:id", validate(schema.updateUser), user.update)
 router.get("/:id", user.detail)
 router.delete("/:id", user.destroy)
 
