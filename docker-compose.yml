@@ -49,5 +49,4 @@ volumes:
   mysql:
 
 networks:
-  default:
-    name: starterkit-node
+  starterkit-node:
