@@ -10,7 +10,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - dbmysql
+      - mysql
     networks:
       - starterkit-network
 
@@ -20,7 +20,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - dbmysql
+      - mysql
     networks:
       - starterkit-network
 
