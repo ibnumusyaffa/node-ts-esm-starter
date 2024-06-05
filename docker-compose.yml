@@ -12,18 +12,18 @@ services:
       - redis
       - dbmysql
     networks:
-      - starterkit-node
+      - starterkit-network
 
   forgot-password-worker:
     build: ./
     command: npm run user:worker:forgot-password
     networks:
-      - starterkit-node
+      - starterkit-network
 
   redis:
     image: redis:7.2.5
     networks:
-      - starterkit-node
+      - starterkit-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -31,7 +31,7 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     networks:
-      - starterkit-node
+      - starterkit-network
 
   dbmysql:
     image: mysql:8.0
@@ -43,11 +43,11 @@ services:
     volumes:
       - dbmysql-volume:/var/lib/mysql
     networks:
-      - starterkit-node
+      - starterkit-network
 
 volumes:
   dbmysql-volume:
 
 networks:
-  starterkit-node:
+  starterkit-network:
     driver: bridge
