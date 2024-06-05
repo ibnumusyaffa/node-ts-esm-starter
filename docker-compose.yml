@@ -11,18 +11,27 @@ services:
       - rabbitmq
       - redis
       - mysql
+    networks:
+      - starterkit-node
+
   forgot-password-worker:
     build: ./
     command: npm run user:worker:forgot-password
+    networks:
+      - starterkit-node
 
   redis:
     image: redis:7.2.5
+    networks:
+      - starterkit-node
 
   rabbitmq:
     image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - starterkit-node
 
   mysql:
     image: mysql:8.0
@@ -33,6 +42,11 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - mysql:/var/lib/mysql
+    networks:
+      - starterkit-node
 
 volumes:
   mysql:
+
+networks:
+  starterkit-node:
