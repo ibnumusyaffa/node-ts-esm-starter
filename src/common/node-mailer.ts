@@ -5,7 +5,7 @@ export const transporter = nodemailer.createTransport({
   pool: true,
   host: env.MAIL_HOST,
   port: env.MAIL_PORT,
-  secure: false,
+  secure: true,
   from: {
     name: env.MAIL_FROM_NAME,
     address: env.MAIL_FROM_ADDRESS,
