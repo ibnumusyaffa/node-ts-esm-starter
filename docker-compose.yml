@@ -11,6 +11,9 @@ services:
       - rabbitmq
       - redis
       - mysql
+  forgot-password-worker:
+    build: ./
+    command: npm run user:worker:forgot-password
 
   redis:
     image: redis:7.2.5
