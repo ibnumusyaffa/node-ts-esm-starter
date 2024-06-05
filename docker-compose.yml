@@ -41,7 +41,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
-      - mysql:/var/lib/mysql
+      - dbmysql-volume:/var/lib/mysql
     networks:
       - starterkit-node
 
