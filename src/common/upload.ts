@@ -1,4 +1,5 @@
-import { randomUUID } from "crypto"
+/* eslint-disable unicorn/no-null */
+import { randomUUID } from "node:crypto"
 import multer from "multer"
 
 const publicStorage = multer.diskStorage({

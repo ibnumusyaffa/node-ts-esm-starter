@@ -1,7 +1,7 @@
 import amqp from "amqplib"
 import env from "@/config/env.js"
 
-let connection: amqp.Connection | undefined = undefined
+let connection: amqp.Connection | undefined
 export async function connect() {
   if (connection) {
     return connection

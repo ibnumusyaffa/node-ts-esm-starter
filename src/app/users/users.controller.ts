@@ -10,7 +10,7 @@ type ListParams = {
 }
 
 export async function list(
-  req: Request<{}, {}, {}, ListParams>,
+  req: Request<any, any, any, ListParams>,
   res: Response,
   next: NextFunction
 ) {
@@ -59,7 +59,7 @@ type CreateBody = {
 }
 
 export async function create(
-  req: Request<{}, {}, CreateBody>,
+  req: Request<any, any, CreateBody>,
   res: Response,
   next: NextFunction
 ) {
@@ -87,13 +87,13 @@ type UpdateBody = {
 }
 
 export async function update(
-  req: Request<{ id: string }, {}, UpdateBody>,
+  req: Request<{ id: string }, any, UpdateBody>,
   res: Response,
   next: NextFunction
 ) {
   try {
     const body = req.body
-    const userId = parseInt(req.params.id)
+    const userId = Number.parseInt(req.params.id)
 
     const user = await db
       .selectFrom("users")
@@ -125,7 +125,7 @@ export async function detail(
   next: NextFunction
 ) {
   try {
-    const userId = parseInt(req.params.id)
+    const userId = Number.parseInt(req.params.id)
     const user = await db
       .selectFrom("users")
       .where("id", "=", userId)
@@ -149,7 +149,7 @@ export async function destroy(
   next: NextFunction
 ) {
   try {
-    const userId = parseInt(req.params.id)
+    const userId = Number.parseInt(req.params.id)
     const user = await db
       .selectFrom("users")
       .where("id", "=", userId)

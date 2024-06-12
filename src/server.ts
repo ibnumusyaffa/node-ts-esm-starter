@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { handleError } from "@/common/error.js"
 import env from "@/config/env.js"
-import http from "http"
+import http from "node:http"
 import process from "node:process"
 import app from "@/app.js"
 

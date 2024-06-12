@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { db } from "@/common/database/index.js"
 import bcrypt from "bcrypt"
 import { createToken } from "@/common/auth.js"
-import { randomUUID } from "crypto"
+import { randomUUID } from "node:crypto"
 import env from "@/config/env.js"
 import { sendforgotPasswordEmail } from "./jobs/users.queue.js"
 
@@ -12,7 +12,7 @@ type LoginBody = {
 }
 
 export async function login(
-  req: Request<{}, {}, LoginBody>,
+  req: Request<any, any, LoginBody>,
   res: Response,
   next: NextFunction
 ) {
@@ -65,7 +65,7 @@ type ForgotPasswordBody = {
 }
 
 export async function forgotPassword(
-  req: Request<{}, {}, ForgotPasswordBody>,
+  req: Request<any, any, ForgotPasswordBody>,
   res: Response,
   next: NextFunction
 ) {
@@ -116,7 +116,7 @@ type ResetPasswordBody = {
   password: string
 }
 export async function resetPassword(
-  req: Request<{}, {}, ResetPasswordBody>,
+  req: Request<any, any, ResetPasswordBody>,
   res: Response,
   next: NextFunction
 ) {
@@ -140,7 +140,7 @@ export async function resetPassword(
     }
 
     //check expired from created_at
-    const curTime = new Date().getTime()
+    const curTime = Date.now()
     const diffInMinutes = (curTime - reset.created_at.getTime()) / (1000 * 60)
     const isExpired = diffInMinutes > 60
 

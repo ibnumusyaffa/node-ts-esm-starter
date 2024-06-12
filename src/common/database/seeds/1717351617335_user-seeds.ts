@@ -13,7 +13,7 @@ export async function seed(db: Kysely<any>): Promise<void> {
   })
 
   for (let i = 0; i < 100; i++) {
-    let user = {
+    const user = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: await bcrypt.hash("Password123*", 10),

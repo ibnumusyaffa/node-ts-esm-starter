@@ -1,6 +1,6 @@
 import { pinoHttp, Options } from "pino-http"
 import env from "@/config/env.js"
-import { randomUUID } from "crypto"
+import { randomUUID } from "node:crypto"
 
 const config: Record<typeof env.LOG_MODE, Options> = {
   development: {
