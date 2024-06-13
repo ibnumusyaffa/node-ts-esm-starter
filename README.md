@@ -60,7 +60,7 @@ npm run dev
 ## Kysely/migration scripts
 
 - `npx kysely migrate:down` - Undo the last/specified migration that was run.
-- `npx kysely migrate:latest` -Update the database schema to the latest version.
+- `npx kysely migrate:latest` - Update the database schema to the latest version.
 - `npx kysely migrate:list` - List both completed and pending migrations.
 - `npx kysely migrate:make` - Create a new migration file.
 - `npx kysely migrate:rollback` - Rollback all the completed migrations.
