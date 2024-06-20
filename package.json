@@ -17,7 +17,7 @@
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
     "scheduler:run": "node ./dist/scheduler.js",
     "user:worker:forgot-password": "tsx ./src/app/auth/jobs/forgot-password-email.worker.ts",
-    "test": "NODE_ENV=test LOG_MODE=test tap run --passes --before='src/tests/before.ts' --include='src/tests/**/*.test.+(js|ts|jsx|tsx)'"
+    "test": "NODE_ENV=test LOG_MODE=test vitest"
   },
   "keywords": [],
   "author": "",
@@ -47,7 +47,10 @@
     "supertest": "^7.0.0",
     "tap": "^19.2.5",
     "tsc-alias": "^1.8.10",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "amqplib": "^0.10.4",
@@ -68,6 +71,7 @@
     "pino-http": "^10.1.0",
     "pino-http-print": "^3.1.0",
     "tsx": "^4.15.4",
+    "vite-node": "^1.6.0",
     "znv": "^0.4.0",
     "zod": "^3.23.8"
   },
