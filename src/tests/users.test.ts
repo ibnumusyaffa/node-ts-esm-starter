@@ -3,14 +3,9 @@ import app from "@/app.js"
 import { faker } from "@faker-js/faker"
 import { createToken } from "@/common/auth.js"
 import { createUser } from "./seeders/user.js"
-import { expect, test, describe, beforeAll } from "vitest"
+import { expect, test, describe } from "vitest"
 
 const loginUser = await createUser()
-
-beforeAll(() => {
-  const s = app.listen()
-  console.log("address",s.address())
-})
 
 describe("create user", () => {
   test("can create with valid data", async () => {
