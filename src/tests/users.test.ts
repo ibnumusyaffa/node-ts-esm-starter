@@ -1,15 +1,14 @@
-import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { db } from "@/common/database/index.js"
 import { faker } from "@faker-js/faker"
 import { createToken } from "@/common/auth.js"
 import { createUser } from "./seeders/user.js"
+import { expect, test, describe } from "vitest"
 
 const loginUser = await createUser()
 
-t.test("create user", async (t) => {
-  t.test("can create with valid data", async (t) => {
+describe("create user", () => {
+  test("can create with valid data", async () => {
     const response = await request(app)
       .post("/users")
       .auth(createToken(loginUser.email), { type: "bearer" })
@@ -19,54 +18,61 @@ t.test("create user", async (t) => {
         password: faker.internet.password({ length: 8 }),
       })
 
-    t.equal(201, response.status)
+    expect(response.status).toBe(201)
   })
-  t.test("cant create with invalid data", async (t) => {
+  test("cant create with invalid data", async () => {
     const response = await request(app)
       .post("/users")
       .auth(createToken(loginUser.email), { type: "bearer" })
       .send({
         email: "",
       })
-    t.equal(422, response.status)
+
+    expect(response.status).toBe(422)
   })
 })
 
-t.test("list users", async (t) => {
-  const response = await request(app)
-    .get("/users")
-    .auth(createToken(loginUser.email), { type: "bearer" })
-  t.type(response.body.data, "array")
+describe("list users", () => {
+  test("list users works", async () => {
+    const response = await request(app)
+      .get("/users")
+      .auth(createToken(loginUser.email), { type: "bearer" })
+
+    expect(Array.isArray(response.body.data)).toBe(true)
+  })
 })
 
-t.test("detail user", async (t) => {
-  const detailResponse = await request(app)
-    .get(`/users/${loginUser.id}`)
-    .auth(createToken(loginUser.email), { type: "bearer" })
+describe("detail user", () => {
+  test("user detail with valid id", async () => {
+    const detailResponse = await request(app)
+      .get(`/users/${loginUser.id}`)
+      .auth(createToken(loginUser.email), { type: "bearer" })
 
-  t.equal(200, detailResponse.status)
-  t.equal(loginUser.email, detailResponse.body.email)
-  t.equal(loginUser.name, detailResponse.body.name)
+    expect(detailResponse.status).toBe(200)
+    expect(detailResponse.body.email).toBe(loginUser.email)
+    expect(detailResponse.body.name).toBe(loginUser.name)
+  })
 })
 
-t.test("delete user", async (t) => {
-  t.test("can delete with valid id", async (t) => {
+describe("DELETE /user", () => {
+  test("can delete with valid id", async () => {
     const testUser = await createUser()
     const response = await request(app)
       .delete(`/users/${testUser.id}`)
       .auth(createToken(loginUser.email), { type: "bearer" })
 
-    t.equal(200, response.status)
+    expect(response.status).toBe(200)
   })
-  t.test("cant delete with invalid id", async (t) => {
+  test("cant delete with invalid id", async () => {
     const response = await request(app)
       .delete(`/users/0`)
       .auth(createToken(loginUser.email), { type: "bearer" })
 
-    t.equal(404, response.status)
+    expect(response.status).toBe(404)
   })
 })
 
-t.teardown(async () => {
-  await db.destroy()
-})
+
+// t.teardown(async () => {
+//   await db.destroy()
+// })

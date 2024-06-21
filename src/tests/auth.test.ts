@@ -1,43 +1,45 @@
-import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { db } from "@/common/database/index.js"
 import { createUser } from "./seeders/user.js"
+import { expect, test, describe } from "vitest"
 
-t.test("can login with valid data", async (t) => {
-  // create user
-  const user = await createUser()
+describe("auth", () => {
+  test("can login with valid data", async (t) => {
+    // create user
+    const user = await createUser()
 
-  // login
-  const respLogin = await request(app).post("/auth/login").send({
-    email: user.email,
-    password: user.password,
+    // login
+    const respLogin = await request(app).post("/auth/login").send({
+      email: user.email,
+      password: user.password,
+    })
+
+    // assert login response
+
+    expect(respLogin.body).toHaveProperty("token")
+    // profile
+    const respProfile = await request(app)
+      .get("/auth/profile")
+      .auth(respLogin.body.token, { type: "bearer" })
+    // assert profile response
+    expect(user.name).toBe(respProfile.body.name)
+    expect(user.email).toBe(respProfile.body.email)
   })
 
-  // assert login response
-  t.hasOwnPropsOnly(respLogin.body, ["token"])
+  test("cant login with invalid data", async (t) => {
+    const response = await request(app).post("/auth/login").send({
+      email: "invalid@example.com",
+      password: "Password123*",
+    })
 
-  // profile
-  const respProfile = await request(app)
-    .get("/auth/profile")
-    .auth(respLogin.body.token, { type: "bearer" })
-  // assert profile response
-  t.equal(user.name, respProfile.body.name)
-  t.equal(user.email, respProfile.body.email)
-})
+    const body = response.body
 
-t.test("cant login with invalid data", async (t) => {
-  const response = await request(app).post("/auth/login").send({
-    email: "invalid@example.com",
-    password: "Password123*",
+    expect(body).toHaveProperty("message")
+    expect(response.status).toBe(401)
   })
-
-  const body = response.body
-
-  t.hasOwnProp(body, "message")
-  t.equal(401, response.status)
 })
 
-t.teardown(async () => {
-  await db.destroy()
-})
+
+// t.teardown(async () => {
+//   await db.destroy()
+// })

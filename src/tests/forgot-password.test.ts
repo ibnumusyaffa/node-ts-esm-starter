@@ -1,58 +1,58 @@
-import t from "tap"
 import request from "supertest"
 import app from "@/app.js"
-import { db } from "@/common/database/index.js"
-import { connect } from "@/common/rabbit-mq.js"
 import { createUser } from "./seeders/user.js"
+import { expect, test, describe } from "vitest"
 
 const loginUser = await createUser()
 
-t.test("forgot password test", async (t) => {
-  //request forgot password email
-  const forgotPasswordResponse = await request(app)
-    .post("/auth/forgot-password")
-    .send({
-      email: loginUser.email,
-    })
+describe("forgot-password", () => {
+  test("forgot password test", async (t) => {
+    //request forgot password email
+    const forgotPasswordResponse = await request(app)
+      .post("/auth/forgot-password")
+      .send({
+        email: loginUser.email,
+      })
 
-  //get the token
-  const token = forgotPasswordResponse.body.token
-  t.equal(200, forgotPasswordResponse.status)
+    //get the token
+    const token = forgotPasswordResponse.body.token
+    expect(200).toBe(forgotPasswordResponse.status)
 
-  //reset password with token
-  const newPassword = "Something123*"
-  const resetPasswordResponse = await request(app)
-    .post("/auth/reset-password")
-    .send({
+    //reset password with token
+    const newPassword = "Something123*"
+    const resetPasswordResponse = await request(app)
+      .post("/auth/reset-password")
+      .send({
+        email: loginUser.email,
+        token: token,
+        password: newPassword,
+        password_confirmation: newPassword,
+      })
+
+    expect(resetPasswordResponse.status).toBe(200)
+
+    //check new password with login
+    const respLogin = await request(app).post("/auth/login").send({
       email: loginUser.email,
-      token: token,
       password: newPassword,
-      password_confirmation: newPassword,
     })
 
-  t.equal(200, resetPasswordResponse.status)
+    expect(respLogin.status).toBe(200)
+    // assert login response
+    expect(respLogin.body).toHaveProperty(["token"])
 
-  //check new password with login
-  const respLogin = await request(app).post("/auth/login").send({
-    email: loginUser.email,
-    password: newPassword,
+    // profile
+    const respProfile = await request(app)
+      .get("/auth/profile")
+      .auth(respLogin.body.token, { type: "bearer" })
+    // assert profile response
+    expect(loginUser.name).toBe(respProfile.body.name)
+    expect(loginUser.email).toBe(respProfile.body.email)
   })
-  t.equal(200, respLogin.status)
-
-  // assert login response
-  t.hasOwnPropsOnly(respLogin.body, ["token"])
-
-  // profile
-  const respProfile = await request(app)
-    .get("/auth/profile")
-    .auth(respLogin.body.token, { type: "bearer" })
-  // assert profile response
-  t.equal(loginUser.name, respProfile.body.name)
-  t.equal(loginUser.email, respProfile.body.email)
 })
 
-t.teardown(async () => {
-  await db.destroy()
-  const connection = await connect()
-  await connection.close()
-})
+// t.teardown(async () => {
+//   await db.destroy()
+//   const connection = await connect()
+//   await connection.close()
+// })
