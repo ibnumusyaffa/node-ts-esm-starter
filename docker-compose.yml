@@ -38,6 +38,8 @@ services:
   mysql:
     image: mysql:8.0-debian
     restart: always
+    ports:
+      - 3306:3308
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: testdb

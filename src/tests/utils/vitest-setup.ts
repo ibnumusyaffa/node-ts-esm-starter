@@ -1,4 +1,3 @@
-
 import { expect } from "vitest"
 import { pool } from "@/common/database/index.js"
 const poolPromise = pool.promise()
@@ -25,7 +24,7 @@ expect.extend({
       }
     } catch (error: any) {
       return {
-        message: () => `${error?.message}`,
+        message: () => error?.message ?? "",
         pass: false,
       }
     }

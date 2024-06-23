@@ -1,7 +1,9 @@
 import env from "@/config/env.js"
-import { Database } from "./types/index.js"
+import path from "node:path"
+import { Database } from "@/common/database/types/index.js"
 import { createPool } from "mysql2"
-import { Kysely, MysqlDialect } from "kysely"
+import { Kysely, MysqlDialect, Migrator } from "kysely"
+import { TSFileMigrationProvider } from "kysely-ctl"
 
 export const pool = createPool({
   database: env.DB_NAME,
@@ -18,3 +20,26 @@ export const dialect = new MysqlDialect({
 export const db = new Kysely<Database>({
   dialect,
 })
+
+export async function migrate() {
+  const migrator = new Migrator({
+    db,
+    provider: new TSFileMigrationProvider({
+      migrationFolder: path.join(import.meta.dirname, "./migrations"),
+    }),
+  })
+
+  const { error, results } = await migrator.migrateToLatest()
+
+  if (results)
+    for (const item of results) {
+      if (item.status === "Error") {
+        console.error(`failed to execute migration "${item.migrationName}"`)
+      }
+    }
+
+  if (error) {
+    console.error("failed to run `migrateToLatest`")
+    console.error(error)
+  }
+}

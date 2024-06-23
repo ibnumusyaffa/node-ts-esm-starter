@@ -1,7 +1,11 @@
 import request from "supertest"
 import app from "@/app.js"
 import { createUser } from "./seeders/user.js"
-import { expect, test, describe } from "vitest"
+import { expect, test, describe, beforeAll, afterAll } from "vitest"
+
+beforeAll(() => {
+  console.log("before all")
+})
 
 describe("auth", () => {
   test("can login with valid data", async (t) => {
@@ -39,6 +43,9 @@ describe("auth", () => {
   })
 })
 
+afterAll(() => {
+  console.log("after all")
+})
 
 // t.teardown(async () => {
 //   await db.destroy()
