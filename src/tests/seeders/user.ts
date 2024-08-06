@@ -8,24 +8,14 @@ export async function createUser() {
     email: faker.internet.email(),
     password: faker.internet.password({ length: 8 }),
   }
-  await db
+  const result = await db
     .insertInto("users")
     .values({
       name: user.name,
       email: user.email,
       password: await bcrypt.hash(user.password, 10),
     })
-    .execute()
-
-  const createdUser = await db
-    .selectFrom("users")
-    .where("email", "=", user.email)
-    .selectAll()
     .executeTakeFirst()
 
-  if (!createdUser) {
-    throw new Error("created user is not found")
-  }
-
-  return { ...user, id: createdUser.id }
+  return { ...user, id: Number(result.insertId) }
 }

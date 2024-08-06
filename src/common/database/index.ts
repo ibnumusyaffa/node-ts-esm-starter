@@ -1,9 +1,10 @@
 import env from "@/config/env.js"
 import { Database } from "@/common/database/types/index.js"
-import { createPool } from "mysql2"
+import { createPool, QueryOptions } from "mysql2"
 import { Kysely, MysqlDialect, Migrator } from "kysely"
 import path from "node:path"
 import { TSFileMigrationProvider } from "kysely-ctl"
+import { promisify } from "node:util"
 
 export const pool = createPool({
   database: env.DB_NAME,
@@ -41,5 +42,40 @@ export async function migrate() {
   if (error) {
     console.error("failed to run `migrateToLatest`")
     console.error(error)
+  }
+}
+
+const query = promisify(pool.query).bind(pool) as (
+  sql: string | QueryOptions,
+  values?: any
+) => Promise<any>
+
+export async function truncateAllTables() {
+  try {
+    // Disable foreign key checks
+    await query("SET FOREIGN_KEY_CHECKS = 0")
+
+    // Get all table names except kysely_migration and kysely_migration_lock
+    const rows = await query(
+      `
+      SELECT TABLE_NAME
+      FROM INFORMATION_SCHEMA.TABLES
+      WHERE TABLE_SCHEMA = ? AND TABLE_NAME NOT IN ('kysely_migration', 'kysely_migration_lock')
+    `,
+      [env.DB_NAME]
+    )
+
+    await Promise.all(
+      rows.map((row: { TABLE_NAME: string }) =>
+        query({ sql: `TRUNCATE TABLE ${row.TABLE_NAME}` })
+      )
+    )
+    // Re-enable foreign key checks
+    await query("SET FOREIGN_KEY_CHECKS = 1")
+
+    console.log("All tables truncated successfully")
+  } catch (error) {
+    console.error("Error truncating tables:", error)
+    throw error
   }
 }

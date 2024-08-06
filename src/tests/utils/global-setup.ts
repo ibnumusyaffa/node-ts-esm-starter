@@ -3,10 +3,14 @@ import { StartedTestContainer } from "testcontainers"
 import { rabbitMQ, mysql } from "@/tests/utils/container.js"
 
 let containers: StartedTestContainer[] = []
+const useContainer = false
 export async function setup() {
   const startTime = performance.now()
 
-  containers = await Promise.all([rabbitMQ(), mysql()])
+  if (useContainer) {
+    containers = await Promise.all([rabbitMQ(), mysql()])
+  }
+
   await migrate()
 
   const timeTaken = performance.now() - startTime
