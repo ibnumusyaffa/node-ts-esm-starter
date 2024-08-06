@@ -1,8 +1,8 @@
 import env from "@/config/env.js"
-import path from "node:path"
 import { Database } from "@/common/database/types/index.js"
 import { createPool } from "mysql2"
 import { Kysely, MysqlDialect, Migrator } from "kysely"
+import path from "node:path"
 import { TSFileMigrationProvider } from "kysely-ctl"
 
 export const pool = createPool({

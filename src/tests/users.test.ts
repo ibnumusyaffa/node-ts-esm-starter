@@ -83,7 +83,3 @@ describe("DELETE /user", () => {
     expect(response.status).toBe(404)
   })
 })
-
-// t.teardown(async () => {
-//   await db.destroy()
-// })

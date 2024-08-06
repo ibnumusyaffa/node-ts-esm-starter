@@ -1,10 +1,14 @@
 import request from "supertest"
 import app from "@/app.js"
 import { createUser } from "./seeders/user.js"
-import { expect, test, describe } from "vitest"
+import { expect, test, describe, vi } from "vitest"
+import * as queue from "@/app/auth/jobs/users.queue.js"
+
+vi.spyOn(queue, "sendforgotPasswordEmail").mockImplementation(async () => {
+  console.log("mocked")
+})
 
 const loginUser = await createUser()
-
 describe("forgot-password", () => {
   test("forgot password test", async (t) => {
     //request forgot password email
@@ -50,9 +54,3 @@ describe("forgot-password", () => {
     expect(loginUser.email).toBe(respProfile.body.email)
   })
 })
-
-// t.teardown(async () => {
-//   await db.destroy()
-//   const connection = await connect()
-//   await connection.close()
-// })

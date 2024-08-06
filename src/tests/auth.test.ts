@@ -3,31 +3,28 @@ import app from "@/app.js"
 import { createUser } from "./seeders/user.js"
 import { expect, test, describe, beforeAll, afterAll } from "vitest"
 
-beforeAll(() => {
-  console.log("before all")
-})
+beforeAll(() => {})
 
 describe("auth", () => {
   test("can login with valid data", async (t) => {
-    // create user
+    // arrange
     const user = await createUser()
 
-    // login
-    const respLogin = await request(app).post("/auth/login").send({
+    // act
+    const loginResponse = await request(app).post("/auth/login").send({
       email: user.email,
       password: user.password,
     })
 
-    // assert login response
-
-    expect(respLogin.body).toHaveProperty("token")
+    // assert
+    expect(loginResponse.body).toHaveProperty("token")
     // profile
-    const respProfile = await request(app)
+    const profileResponse = await request(app)
       .get("/auth/profile")
-      .auth(respLogin.body.token, { type: "bearer" })
+      .auth(loginResponse.body.token, { type: "bearer" })
     // assert profile response
-    expect(user.name).toBe(respProfile.body.name)
-    expect(user.email).toBe(respProfile.body.email)
+    expect(user.name).toBe(profileResponse.body.name)
+    expect(user.email).toBe(profileResponse.body.email)
   })
 
   test("cant login with invalid data", async (t) => {
@@ -43,10 +40,4 @@ describe("auth", () => {
   })
 })
 
-afterAll(() => {
-  console.log("after all")
-})
-
-// t.teardown(async () => {
-//   await db.destroy()
-// })
+afterAll(() => {})
