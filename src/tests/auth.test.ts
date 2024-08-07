@@ -2,6 +2,7 @@ import request from "supertest"
 import app from "@/app.js"
 import { createUser } from "./seeders/user.js"
 import { expect, test, describe, beforeAll, afterAll } from "vitest"
+import { db } from "@/common/database/index.js"
 
 beforeAll(() => {})
 
@@ -40,4 +41,6 @@ describe("auth", () => {
   })
 })
 
-afterAll(() => {})
+afterAll(async () => {
+  await db.destroy()
+})

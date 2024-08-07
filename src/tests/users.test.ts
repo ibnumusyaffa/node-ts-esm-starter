@@ -3,7 +3,8 @@ import app from "@/app.js"
 import { faker } from "@faker-js/faker"
 import { createToken } from "@/common/auth.js"
 import { createUser } from "./seeders/user.js"
-import { expect, test, describe } from "vitest"
+import { expect, test, describe, afterAll } from "vitest"
+import { db } from "@/common/database/index.js"
 
 const loginUser = await createUser()
 
@@ -82,4 +83,8 @@ describe("DELETE /user", () => {
 
     expect(response.status).toBe(404)
   })
+})
+
+afterAll(async () => {
+  await db.destroy()
 })
