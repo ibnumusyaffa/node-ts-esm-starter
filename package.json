@@ -17,7 +17,7 @@
     "scheduler:run:dev": "tsx watch --clear-screen=false src/scheduler.ts",
     "scheduler:run": "node ./dist/scheduler.js",
     "user:worker:forgot-password": "tsx ./src/app/auth/jobs/forgot-password-email.worker.ts",
-    "test": "NODE_ENV=test LOG_MODE=test  vitest run --reporter=hanging-process"
+    "test": "NODE_ENV=test LOG_MODE=test  vitest run --reporter=verbose"
   },
   "keywords": [],
   "author": "",
